@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly
 open class CommonProxy(val side: Side) {
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
+    MinecraftForge.EVENT_BUS.register(Damage)
   }
   open fun init(ev: FMLInitializationEvent) { }
   open fun postInit(ev:FMLPostInitializationEvent) { }
