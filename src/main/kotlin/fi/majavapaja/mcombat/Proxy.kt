@@ -19,8 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly
 open class CommonProxy(val side: Side) {
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
-    MinecraftForge.EVENT_BUS.register(Damage)
+    Damage.initialize()
   }
+
   open fun init(ev: FMLInitializationEvent) { }
   open fun postInit(ev:FMLPostInitializationEvent) { }
   open fun registerItemRenderer(item: Item, meta: Int, id: String) { }
