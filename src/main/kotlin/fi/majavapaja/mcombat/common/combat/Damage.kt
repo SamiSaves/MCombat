@@ -34,8 +34,14 @@ object Damage {
 
   @SubscribeEvent
   fun attachCapabilityEntity(event: AttachCapabilitiesEvent<Entity>) {
-    if (event.`object` is EntityLiving) {
-      event.addCapability(damageTypeResource, DamageTypeProvider())
+    val entity = event.`object`
+    if (entity is EntityLiving) {
+      val damageType = if (entity is EntityZombie) {
+        "rotten"
+      } else {
+        "normal"
+      }
+      event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
     }
   }
 
@@ -50,16 +56,6 @@ object Damage {
       }
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
-    }
-  }
-
-  @SubscribeEvent
-  fun onEntitySpawn(event: EntityJoinWorldEvent) {
-    val entity = event.entity
-    if (entity is EntityMob && entity is EntityZombie) {
-      val damageType = DamageTypeProvider.getDamageType(entity)
-      damageType?.type = "rotten"
-      println("Damage type set ${damageType?.type}")
     }
   }
 }
