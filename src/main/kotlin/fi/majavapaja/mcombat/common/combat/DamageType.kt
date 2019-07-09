@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.combat
 
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTBase
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -9,9 +10,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject
 import net.minecraftforge.common.capabilities.ICapabilitySerializable
 import java.util.concurrent.Callable
 
-class DamageType {
-  var type: String = "normal"
-
+class DamageType(var type: String = "normal") {
   fun createNBT(): NBTTagCompound {
     val nbt = NBTTagCompound()
     nbt.setString("damage-type", type)
@@ -23,7 +22,7 @@ class DamageType {
   }
 }
 
-class DamageTypeProvider: ICapabilitySerializable<NBTBase> {
+class DamageTypeProvider(var type: String = "normal"): ICapabilitySerializable<NBTBase> {
   companion object {
     @CapabilityInject(DamageType::class)
     lateinit var damageTypeCapability: Capability<DamageType>
@@ -34,8 +33,15 @@ class DamageTypeProvider: ICapabilitySerializable<NBTBase> {
       } else {
         null
       }
+
+    fun getDamageType(itemStack: ItemStack): DamageType? =
+        if (itemStack.hasCapability(damageTypeCapability, null)) {
+          itemStack.getCapability(damageTypeCapability, null)
+        } else {
+          null
+        }
   }
-  private var instance = DamageType()
+  private var instance = DamageType(this.type)
 
   override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? =
       when (capability) {

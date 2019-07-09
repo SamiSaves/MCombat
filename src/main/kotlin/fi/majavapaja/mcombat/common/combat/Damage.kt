@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.monster.EntityZombie
+import net.minecraft.item.ItemStack
+import net.minecraft.item.ItemSword
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.CapabilityManager
@@ -31,9 +33,23 @@ object Damage {
   fun onLivingHurt(event: LivingHurtEvent) = onLivingHurtEvent(event)
 
   @SubscribeEvent
-  fun attachCapability(event: AttachCapabilitiesEvent<Entity>) {
+  fun attachCapabilityEntity(event: AttachCapabilitiesEvent<Entity>) {
     if (event.`object` is EntityLiving) {
       event.addCapability(damageTypeResource, DamageTypeProvider())
+    }
+  }
+
+  @SubscribeEvent
+  fun attachCapabilityItem(event: AttachCapabilitiesEvent<ItemStack>) {
+    val item = event.`object`.item
+    if (item is ItemSword) {
+      val damageType = if (item.toolMaterialName == "DIAMOND") {
+        "holy"
+      } else {
+        "normal"
+      }
+
+      event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
     }
   }
 
