@@ -33,6 +33,13 @@ class DamageResistanceProvider(val resistance: DamageResistance): ICapabilitySer
       } else {
         null
       }
+
+    fun getDamageResistance(item: ItemStack): DamageResistance? =
+        if (item.hasCapability(damageResistanceCapability, null)) {
+          item.getCapability(damageResistanceCapability, null)
+        } else {
+          null
+        }
   }
 
   override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? =

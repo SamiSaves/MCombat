@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.monster.EntityZombie
+import net.minecraft.item.ItemArmor
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemSword
 import net.minecraft.util.ResourceLocation
@@ -67,6 +68,16 @@ object Damage {
       }
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
+    } else if (item is ItemArmor) {
+      println("This armor is ${item.armorMaterial}")
+
+      val damageResistance = if (item.armorMaterial == ItemArmor.ArmorMaterial.DIAMOND){
+        DamageResistance("rotten", -0.25f)
+      } else {
+        DamageResistance()
+      }
+
+      event.addCapability(damageResistanceResource, DamageResistanceProvider(damageResistance))
     }
   }
 }

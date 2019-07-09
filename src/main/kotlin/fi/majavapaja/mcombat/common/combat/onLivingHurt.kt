@@ -21,18 +21,26 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
       damage = 6f
     }
 
-    val resistance = DamageResistanceProvider.getDamageResistance(entity)
-    if (resistance?.type == damageType?.type) {
-      damage += (resistance?.amount ?: 0f) * damage
-      damage = if (damage < 0f) {
-        0f
-      } else {
-        damage
-      }
+    var resistanceAmount = 0f
+
+    entity.armorInventoryList
+        .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType?.type }
+        .map { resistanceAmount += DamageResistanceProvider.getDamageResistance(it)?.amount ?: 0f }
+
+    val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
+    if (naturalResistance?.type == damageType?.type) {
+      resistanceAmount += naturalResistance?.amount ?: 0f
+    }
+
+    damage += resistanceAmount * damage
+    damage = if (damage < 0f) {
+      0f
+    } else {
+      damage
     }
 
     entity.health -= damage
-    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistance resistance")
+    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistanceAmount resistance")
     return
   }
 
