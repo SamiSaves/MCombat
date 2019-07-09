@@ -10,25 +10,30 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   if (event.source.trueSource is EntityLivingBase) {
     val trueSource = event.source.trueSource as EntityLivingBase
     val weapon = trueSource.heldItemMainhand
+    var damage = 0f
+    var damageType: DamageType?
 
     if (!weapon.isEmpty) {
-      val damageType = DamageTypeProvider.getDamageType(weapon)
-      if (damageType?.type == "holy") {
-        println("Damage was made with a holy weapon!")
-        entity.health -= 10f
-        return
+      damageType = DamageTypeProvider.getDamageType(weapon)
+      damage = 10f
+    } else {
+      damageType = DamageTypeProvider.getDamageType(trueSource)
+      damage = 6f
+    }
+
+    val resistance = DamageResistanceProvider.getDamageResistance(entity)
+    if (resistance?.type == damageType?.type) {
+      damage += (resistance?.amount ?: 0f) * damage
+      damage = if (damage < 0f) {
+        0f
+      } else {
+        damage
       }
     }
 
-    val damageType = DamageTypeProvider.getDamageType(trueSource)
-
-    println("Someone was hit with ${damageType?.type}")
-
-    if (damageType?.type == "rotten") {
-      println("Damage was rotten!")
-      entity.health -= 6f
-      return
-    }
+    entity.health -= damage
+    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistance resistance")
+    return
   }
 
   entity.health -= 2f

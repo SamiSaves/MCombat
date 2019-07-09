@@ -22,9 +22,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 @Mod.EventBusSubscriber
 object Damage {
   private val damageTypeResource = ResourceLocation(modId, "damage_type")
+  private val damageResistanceResource = ResourceLocation(modId, "damage_resistance")
 
   fun initialize() {
     CapabilityManager.INSTANCE.register(DamageType::class.java, DamageTypeStorage, DamageTypeFactory)
+    CapabilityManager.INSTANCE.register(DamageResistance::class.java, DamageResistanceStorage, DamageResistanceFactory)
     MinecraftForge.EVENT_BUS.register(this)
     println("Initialized damage stuffs")
   }
@@ -36,12 +38,19 @@ object Damage {
   fun attachCapabilityEntity(event: AttachCapabilitiesEvent<Entity>) {
     val entity = event.`object`
     if (entity is EntityLiving) {
-      val damageType = if (entity is EntityZombie) {
-        "rotten"
+      var damageType: String
+      var damageResistance: DamageResistance
+
+      if (entity is EntityZombie) {
+        damageResistance = DamageResistance("holy", 1f)
+        damageType = "rotten"
       } else {
-        "normal"
+        damageResistance = DamageResistance()
+        damageType = "normal"
       }
+
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
+      event.addCapability(damageResistanceResource, DamageResistanceProvider(damageResistance))
     }
   }
 
@@ -50,8 +59,10 @@ object Damage {
     val item = event.`object`.item
     if (item is ItemSword) {
       val damageType = if (item.toolMaterialName == "DIAMOND") {
+        println("This Sword is ${item.toolMaterialName}")
         "holy"
       } else {
+        println("This sword is ${item.toolMaterialName}")
         "normal"
       }
 
