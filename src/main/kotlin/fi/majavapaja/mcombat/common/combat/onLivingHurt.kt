@@ -10,7 +10,7 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   if (event.source.trueSource is EntityLivingBase) {
     val trueSource = event.source.trueSource as EntityLivingBase
     val weapon = trueSource.heldItemMainhand
-    var damage = 0f
+    var damage: Float
     var damageType: DamageType?
 
     if (!weapon.isEmpty) {
