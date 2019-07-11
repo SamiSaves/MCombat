@@ -1,9 +1,9 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.modId
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLiving
-import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.monster.EntityZombie
 import net.minecraft.item.ItemArmor
 import net.minecraft.item.ItemStack
@@ -12,9 +12,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.event.AttachCapabilitiesEvent
-import net.minecraftforge.event.entity.EntityJoinWorldEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
-import net.minecraftforge.event.entity.living.LivingSpawnEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -59,11 +57,9 @@ object Damage {
   fun attachCapabilityItem(event: AttachCapabilitiesEvent<ItemStack>) {
     val item = event.`object`.item
     if (item is ItemSword) {
-      val damageType = if (item.toolMaterialName == "DIAMOND") {
-        println("This Sword is ${item.toolMaterialName}")
+      val damageType = if (item.registryName == ModItems.debugSword.registryName) {
         "holy"
       } else {
-        println("This sword is ${item.toolMaterialName}")
         "normal"
       }
 
