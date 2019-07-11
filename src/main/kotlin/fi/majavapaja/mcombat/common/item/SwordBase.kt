@@ -3,7 +3,7 @@ package fi.majavapaja.mcombat.common.item
 import fi.majavapaja.mcombat.Main
 import net.minecraft.item.ItemSword
 
-class ItemSword(private val name: String, toolMaterial: ToolMaterial): ItemSword(toolMaterial) {
+class SwordBase(private val name: String, toolMaterial: ToolMaterial): ItemSword(toolMaterial) {
   init {
     setRegistryName(name)
     unlocalizedName = name
