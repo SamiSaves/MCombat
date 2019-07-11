@@ -5,8 +5,8 @@ import net.minecraft.item.Item
 import net.minecraftforge.registries.IForgeRegistry
 
 object ModItems {
-  val majavapaja: ItemBase = ItemBase("majavapaja")
-  val debugSword: ItemSword = ItemSword("debug_sword", Item.ToolMaterial.WOOD)
+  val majavapaja = ItemBase("majavapaja")
+  val debugSword = ItemSword("debug_sword", Item.ToolMaterial.WOOD)
   val debugChestplate = ArmorBase("debug_chestplate", ArmorBase.debugMaterial, EntityEquipmentSlot.CHEST)
   val debugLeggings = ArmorBase("debug_leggings", ArmorBase.debugMaterial, EntityEquipmentSlot.LEGS)
   val debugBoots = ArmorBase("debug_boots", ArmorBase.debugMaterial, EntityEquipmentSlot.FEET)
