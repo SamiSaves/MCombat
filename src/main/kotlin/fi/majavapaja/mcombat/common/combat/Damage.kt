@@ -67,10 +67,12 @@ object Damage {
     } else if (item is ItemArmor) {
       println("This armor is ${item.armorMaterial}")
 
-      val damageResistance = if (item.armorMaterial == ItemArmor.ArmorMaterial.DIAMOND){
-        DamageResistance("rotten", -0.25f)
-      } else {
-        DamageResistance()
+      val damageResistance = when (item.registryName) {
+        ModItems.debugChestplate.registryName -> DamageResistance("rotten", -0.4f)
+        ModItems.debugLeggings.registryName -> DamageResistance("rotten", -0.35f)
+        ModItems.debugHelmet.registryName -> DamageResistance("rotten", -0.15f)
+        ModItems.debugBoots.registryName -> DamageResistance("rotten", -0.1f)
+        else -> DamageResistance()
       }
 
       event.addCapability(damageResistanceResource, DamageResistanceProvider(damageResistance))
