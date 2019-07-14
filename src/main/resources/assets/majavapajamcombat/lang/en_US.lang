@@ -6,3 +6,4 @@ item.debug_chestplate.name="Debug Chestplate"
 item.debug_boots.name="Debug Boots"
 item.debug_helmet.name="Debug Helmet"
 item.debug_leggings.name="Debug Leggings"
+effect.resistance=Rotten Resistance

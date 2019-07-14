@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.effect.ModEffects
 import net.minecraft.entity.EntityLivingBase
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
@@ -30,6 +31,14 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
     val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
     if (naturalResistance?.type == damageType?.type) {
       resistanceAmount += naturalResistance?.amount ?: 0f
+    }
+
+    entity.activePotionEffects.map { println(it.effectName) }
+    println(ModEffects.resistance.name)
+    resistanceAmount = if (entity.activePotionEffects.find { it.effectName === ModEffects.resistance.name } != null) {
+      -1f
+    } else {
+      resistanceAmount
     }
 
     damage += resistanceAmount * damage

@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.common.combat.Damage
+import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
@@ -22,7 +23,9 @@ open class CommonProxy(val side: Side) {
     Damage.initialize()
   }
 
-  open fun init(ev: FMLInitializationEvent) { }
+  open fun init(ev: FMLInitializationEvent) {
+    ModEffects.registerEffects()
+  }
   open fun postInit(ev:FMLPostInitializationEvent) { }
   open fun registerItemRenderer(item: Item, meta: Int, id: String) { }
 
