@@ -10,29 +10,13 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   event.isCanceled = true
   val entity = event.entity as EntityLivingBase
   val damageType = getDamageType(event.source.trueSource, event.source.immediateSource)
+  val resistance = getResistance(entity, damageType)
 
   if (event.source.trueSource is EntityLivingBase) {
     var damage = 10f
-    var resistanceAmount = 0f
 
-    entity.armorInventoryList
-        .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType?.type }
-        .map { resistanceAmount += DamageResistanceProvider.getDamageResistance(it)?.amount ?: 0f }
 
-    val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
-    if (naturalResistance?.type == damageType?.type) {
-      resistanceAmount += naturalResistance?.amount ?: 0f
-    }
-
-    entity.activePotionEffects.map { println(it.effectName) }
-    println(ModEffects.resistance.name)
-    resistanceAmount = if (entity.activePotionEffects.find { it.effectName === ModEffects.resistance.name } != null) {
-      -1f
-    } else {
-      resistanceAmount
-    }
-
-    damage += resistanceAmount * damage
+    damage += resistance * damage
     damage = if (damage < 0f) {
       0f
     } else {
@@ -40,7 +24,7 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
     }
 
     entity.health -= damage
-    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistanceAmount resistance")
+    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistance resistance")
     return
   }
 
@@ -63,4 +47,31 @@ private fun getDamageType(trueSource: Entity?, immediateSource: Entity?): Damage
   }
 
   return damageType ?: DamageType()
+}
+
+private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Float {
+  val resistances = ArrayList<DamageResistance?>()
+
+  val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
+  if (naturalResistance?.type == damageType.type) {
+    resistances.add(naturalResistance)
+  }
+
+  resistances.addAll(
+      entity.armorInventoryList
+          .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType?.type }
+          .map { DamageResistanceProvider.getDamageResistance(it)}
+  )
+
+  if (
+      entity.activePotionEffects.find { it.effectName == ModEffects.resistance.name } != null &&
+      damageType.type == "rotten"
+  ) {
+    resistances.add(DamageResistance("rotten", -1f))
+  }
+
+  var resistance = 0f
+  resistances.filterNotNull().map { resistance += it.amount }
+
+  return resistance
 }
