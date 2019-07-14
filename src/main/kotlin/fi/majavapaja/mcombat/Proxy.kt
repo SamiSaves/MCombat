@@ -2,6 +2,9 @@ package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
+import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
+import fi.majavapaja.mcombat.common.entity.DebugArrowRenderer
+import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
@@ -9,6 +12,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.RegistryEvent
+import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -25,6 +29,7 @@ open class CommonProxy(val side: Side) {
 
   open fun init(ev: FMLInitializationEvent) {
     ModEffects.registerEffects()
+    ModEntities.registerEntities()
   }
   open fun postInit(ev:FMLPostInitializationEvent) { }
   open fun registerItemRenderer(item: Item, meta: Int, id: String) { }
@@ -45,6 +50,11 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
         meta,
         ModelResourceLocation("$modId:$id", "inventory")
     )
+  }
+
+  override fun preInit(ev: FMLPreInitializationEvent) {
+    super.preInit(ev)
+    RenderingRegistry.registerEntityRenderingHandler(DebugArrowEntity::class.java, DebugArrowRenderer.factory)
   }
 
   @SubscribeEvent

@@ -1,6 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTBase
 import net.minecraft.nbt.NBTTagCompound
@@ -27,7 +27,7 @@ class DamageTypeProvider(var type: String = "normal"): ICapabilitySerializable<N
     @CapabilityInject(DamageType::class)
     lateinit var damageTypeCapability: Capability<DamageType>
 
-    fun getDamageType(entity: EntityLivingBase): DamageType? =
+    fun getDamageType(entity: Entity): DamageType? =
       if (entity.hasCapability(damageTypeCapability, null)) {
         entity.getCapability(damageTypeCapability, null)
       } else {
@@ -53,10 +53,10 @@ class DamageTypeProvider(var type: String = "normal"): ICapabilitySerializable<N
       capability == damageTypeCapability
 
   override fun serializeNBT(): NBTBase =
-    damageTypeCapability?.storage?.writeNBT(damageTypeCapability, damageTypeCapability.defaultInstance, null) as NBTBase
+    damageTypeCapability.storage?.writeNBT(damageTypeCapability, damageTypeCapability.defaultInstance, null) as NBTBase
 
   override fun deserializeNBT(nbt: NBTBase?) {
-    damageTypeCapability?.storage?.readNBT(damageTypeCapability, damageTypeCapability.defaultInstance, null, nbt)
+    damageTypeCapability.storage?.readNBT(damageTypeCapability, damageTypeCapability.defaultInstance, null, nbt)
   }
 }
 

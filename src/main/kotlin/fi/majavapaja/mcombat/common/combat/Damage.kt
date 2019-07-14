@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.modId
 import net.minecraft.entity.Entity
@@ -38,8 +39,8 @@ object Damage {
   fun attachCapabilityEntity(event: AttachCapabilitiesEvent<Entity>) {
     val entity = event.`object`
     if (entity is EntityLiving) {
-      var damageType: String
-      var damageResistance: DamageResistance
+      val damageType: String
+      val damageResistance: DamageResistance
 
       if (entity is EntityZombie) {
         damageResistance = DamageResistance("holy", 1f)
@@ -51,6 +52,8 @@ object Damage {
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
       event.addCapability(damageResistanceResource, DamageResistanceProvider(damageResistance))
+    } else if (entity is DebugArrowEntity) {
+      event.addCapability(damageTypeResource, DamageTypeProvider("holy"))
     }
   }
 
