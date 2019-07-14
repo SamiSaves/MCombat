@@ -11,24 +11,20 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   val entity = event.entity as EntityLivingBase
   val damageType = getDamageType(event.source.trueSource, event.source.immediateSource)
   val resistance = getResistance(entity, damageType)
-
-  if (event.source.trueSource is EntityLivingBase) {
-    var damage = 10f
-
-
-    damage += resistance * damage
-    damage = if (damage < 0f) {
-      0f
-    } else {
-      damage
-    }
-
-    entity.health -= damage
-    println("Someone was hit with ${damageType?.type} for $damage points of damage. Someone had $resistance resistance")
-    return
+  var damage = when (event.source.trueSource) {
+    is EntityLivingBase -> 10f
+    else -> 2f
   }
 
-  entity.health -= 2f
+  damage += resistance * damage
+  damage = if (damage < 0f) {
+    0f
+  } else {
+    damage
+  }
+
+  entity.health -= damage
+  println("Someone was hit with ${damageType.type} for $damage points of damage. Someone had $resistance resistance")
 }
 
 private fun getDamageType(trueSource: Entity?, immediateSource: Entity?): DamageType {
@@ -59,7 +55,7 @@ private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Flo
 
   resistances.addAll(
       entity.armorInventoryList
-          .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType?.type }
+          .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType.type }
           .map { DamageResistanceProvider.getDamageResistance(it)}
   )
 
