@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.monster.EntityZombie
 import net.minecraft.item.ItemArmor
+import net.minecraft.item.ItemBow
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemSword
 import net.minecraft.util.ResourceLocation
@@ -56,11 +57,11 @@ object Damage {
   @SubscribeEvent
   fun attachCapabilityItem(event: AttachCapabilitiesEvent<ItemStack>) {
     val item = event.`object`.item
-    if (item is ItemSword) {
-      val damageType = if (item.registryName == ModItems.debugSword.registryName) {
-        "holy"
-      } else {
-        "normal"
+    if (item is ItemSword || item is ItemBow) {
+      val damageType = when (item.registryName) {
+        ModItems.debugSword.registryName -> "holy"
+        ModItems.debugBow.registryName -> "holy"
+        else -> "normal"
       }
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))

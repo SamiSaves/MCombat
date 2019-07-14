@@ -12,6 +12,8 @@ object ModItems {
   val debugBoots = ArmorBase("debug_boots", ArmorBase.debugMaterial, EntityEquipmentSlot.FEET)
   val debugHelmet = ArmorBase("debug_helmet", ArmorBase.debugMaterial, EntityEquipmentSlot.HEAD)
 
+  val debugBow = BowBase("debug_bow")
+
   fun register(registry: IForgeRegistry<Item>) {
     registry.registerAll(
         majavapaja,
@@ -19,7 +21,8 @@ object ModItems {
         debugChestplate,
         debugLeggings,
         debugBoots,
-        debugHelmet
+        debugHelmet,
+        debugBow
     )
   }
 
@@ -30,5 +33,6 @@ object ModItems {
     debugLeggings.registerItemModel()
     debugBoots.registerItemModel()
     debugHelmet.registerItemModel()
+    debugBow.registerItemModel()
   }
 }
