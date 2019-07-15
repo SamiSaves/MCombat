@@ -2,6 +2,7 @@ package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
+import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.entity.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.entity.ModEntities
@@ -30,6 +31,7 @@ open class CommonProxy(val side: Side) {
   open fun init(ev: FMLInitializationEvent) {
     ModEffects.registerEffects()
     ModEntities.registerEntities()
+    ModEnchantments.register()
   }
   open fun postInit(ev:FMLPostInitializationEvent) { }
   open fun registerItemRenderer(item: Item, meta: Int, id: String) { }
