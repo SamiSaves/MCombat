@@ -6,10 +6,12 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
-import net.minecraft.init.Enchantments
+import net.minecraft.util.DamageSource
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
 fun onLivingHurtEvent(event: LivingHurtEvent) {
+  if (event.source == DamageSource.FALL || event.source == DamageSource.DROWN) return
+
   event.isCanceled = true
   val entity = event.entity as EntityLivingBase
   val damageType = getDamageType(event.source.trueSource, event.source.immediateSource)
