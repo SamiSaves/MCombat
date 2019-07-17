@@ -1,9 +1,12 @@
 package fi.majavapaja.mcombat.common.combat
 
 import fi.majavapaja.mcombat.common.effect.ModEffects
+import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
+import net.minecraft.init.Enchantments
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
 fun onLivingHurtEvent(event: LivingHurtEvent) {
@@ -36,7 +39,13 @@ private fun getDamageType(trueSource: Entity?, immediateSource: Entity?): Damage
     val weapon = trueSource.heldItemMainhand
 
     damageType = if (!weapon.isEmpty) {
-      DamageTypeProvider.getDamageType(weapon)
+      val enchantments = EnchantmentHelper.getEnchantments(weapon)
+
+      if (enchantments.containsKey(ModEnchantments.HolyDamage)) {
+        DamageType("holy")
+      } else {
+        DamageTypeProvider.getDamageType(weapon)
+      }
     } else {
       DamageTypeProvider.getDamageType(trueSource)
     }
