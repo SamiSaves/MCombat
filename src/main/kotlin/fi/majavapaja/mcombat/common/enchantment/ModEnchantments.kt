@@ -6,8 +6,8 @@ import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 
 object ModEnchantments {
-  val RottenDamage = EnchantmentBase(
-      "rotten_damage",
+  val HolyDamage = EnchantmentBase(
+      "holy_damage",
       Enchantment.Rarity.COMMON,
       EnumEnchantmentType.WEAPON,
       arrayOf(EntityEquipmentSlot.MAINHAND)
@@ -25,6 +25,6 @@ object ModEnchantments {
   )
 
   fun register() {
-    ForgeRegistries.ENCHANTMENTS.registerAll(RottenDamage, RottenResistance)
+    ForgeRegistries.ENCHANTMENTS.registerAll(HolyDamage, RottenResistance)
   }
 }
