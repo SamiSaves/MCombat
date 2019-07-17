@@ -21,7 +21,9 @@ object ModEnchantments {
           EntityEquipmentSlot.HEAD,
           EntityEquipmentSlot.LEGS,
           EntityEquipmentSlot.CHEST
-      )
+      ),
+      1,
+      5
   )
 
   fun register() {

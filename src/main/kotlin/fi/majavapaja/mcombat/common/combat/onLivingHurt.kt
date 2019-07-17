@@ -68,6 +68,8 @@ private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Flo
           .map { DamageResistanceProvider.getDamageResistance(it)}
   )
 
+  if (damageType.type == "rotten") resistances.addAll(getEnchantmentResistance(entity))
+
   if (
       entity.activePotionEffects.find { it.effectName == ModEffects.resistance.name } != null &&
       damageType.type == "rotten"
@@ -80,3 +82,15 @@ private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Flo
 
   return resistance
 }
+
+private fun getEnchantmentResistance(entity: Entity): ArrayList<DamageResistance> {
+  val resistances = ArrayList<DamageResistance>()
+
+  for (armorPiece in entity.armorInventoryList) {
+    val enchantmentLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RottenResistance, armorPiece)
+    resistances.add(DamageResistance("rotten", enchantmentLevel * -0.05f))
+  }
+
+  return resistances
+}
+
