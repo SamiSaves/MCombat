@@ -3,12 +3,8 @@ package fi.majavapaja.mcombat.common.item
 import fi.majavapaja.mcombat.Main
 import net.minecraft.item.Item
 
-@Suppress("unused")
-class ItemBase: Item {
-  var name: String
-
-  constructor(name: String) {
-    this.name = name
+class ItemBase(val name: String): Item() {
+  init {
     setRegistryName(name)
     unlocalizedName = name
     creativeTab = Main.creativeTab
