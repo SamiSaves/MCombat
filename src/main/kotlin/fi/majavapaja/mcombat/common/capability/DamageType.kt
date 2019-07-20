@@ -24,7 +24,7 @@ class DamageTypeProvider(private val damageType: DamageType = DamageType()): ICa
         }
 
     fun register () {
-      CapabilityManager.INSTANCE.register(DamageType::class.java, Storage, Factory)
+      CapabilityManager.INSTANCE.register(DamageType::class.java, DamageTypeStorage, DamageTypeFactory)
     }
   }
 
@@ -46,7 +46,7 @@ class DamageTypeProvider(private val damageType: DamageType = DamageType()): ICa
   }
 }
 
-private object Storage: Capability.IStorage<DamageType> {
+private object DamageTypeStorage: Capability.IStorage<DamageType> {
   override fun readNBT(capability: Capability<DamageType>, instance: DamageType, side: EnumFacing?, nbt: NBTBase) {
     nbt as NBTTagCompound
     instance.type = nbt.getString("damage-type")
@@ -59,7 +59,7 @@ private object Storage: Capability.IStorage<DamageType> {
   }
 }
 
-private object Factory: Callable<DamageType> {
+private object DamageTypeFactory: Callable<DamageType> {
   override fun call(): DamageType {
     return DamageType()
   }
