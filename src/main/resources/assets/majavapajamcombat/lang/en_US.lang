@@ -7,6 +7,6 @@ item.debug_helmet.name=Debug Helmet
 item.debug_leggings.name=Debug Leggings
 item.debug_bow.name=Debug Bow
 item.debug_arrow.name=Debug Arrow
-effect.resistance=Rotten Resistance
+potion.effect.resistance=Rotten Resistance
 enchantment.holy_damage=Holy Damage
 enchantment.rotten_resistance=Rotten Resistance
