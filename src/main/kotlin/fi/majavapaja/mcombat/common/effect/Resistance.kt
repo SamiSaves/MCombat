@@ -1,5 +1,5 @@
 package fi.majavapaja.mcombat.common.effect
 
-class Resistance: EffectBase("resistance", false, 9643043) {
+class Resistance: EffectBase("resistance", false, 0x9ACD32) {
 
 }
