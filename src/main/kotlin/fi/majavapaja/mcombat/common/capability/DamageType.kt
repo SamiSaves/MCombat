@@ -47,12 +47,12 @@ class DamageTypeProvider(private val damageType: DamageType = DamageType()): ICa
 }
 
 private object Storage: Capability.IStorage<DamageType> {
-  override fun readNBT(capability: Capability<DamageType>, instance: DamageType, side: EnumFacing, nbt: NBTBase) {
+  override fun readNBT(capability: Capability<DamageType>, instance: DamageType, side: EnumFacing?, nbt: NBTBase) {
     nbt as NBTTagCompound
     instance.type = nbt.getString("damage-type")
   }
 
-  override fun writeNBT(capability: Capability<DamageType>, instance: DamageType, side: EnumFacing): NBTBase {
+  override fun writeNBT(capability: Capability<DamageType>, instance: DamageType, side: EnumFacing?): NBTBase {
     val nbt = NBTTagCompound()
     nbt.setString("damage-type", instance.type)
     return nbt
