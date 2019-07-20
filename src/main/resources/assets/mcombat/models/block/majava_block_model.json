@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "mcombat:blocks/majava_block",
+    "up": "mcombat:blocks/majava_block",
+    "north": "mcombat:blocks/majava_block",
+    "east": "mcombat:blocks/majava_block",
+    "south": "mcombat:blocks/majava_block",
+    "west": "mcombat:blocks/majava_block"
+  }
+}

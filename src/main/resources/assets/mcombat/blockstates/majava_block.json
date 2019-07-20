@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": {
+      "model": "mcombat:majava_block_model"
+    }
+  }
+}

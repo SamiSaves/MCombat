@@ -1,5 +1,7 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.common.block.BaseBlock
+import fi.majavapaja.mcombat.common.block.MajavaBlock
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
@@ -9,6 +11,7 @@ import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.item.ItemBlock
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
@@ -26,6 +30,18 @@ open class CommonProxy(val side: Side) {
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
     Damage.initialize()
+
+    registerBlock(MajavaBlock())
+  }
+
+  fun registerBlock(block: BaseBlock) {
+    ForgeRegistries.BLOCKS.register(block)
+    val item = ItemBlock(block)
+    item.setRegistryName(block.registryName)
+    ForgeRegistries.ITEMS.register(item)
+
+    val model = ModelResourceLocation("$modId:${block.name}", "inventory")
+    ModelLoader.setCustomModelResourceLocation(item, 0, model)
   }
 
   open fun init(ev: FMLInitializationEvent) {
