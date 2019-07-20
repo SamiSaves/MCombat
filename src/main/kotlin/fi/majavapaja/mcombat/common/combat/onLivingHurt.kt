@@ -1,5 +1,9 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.capability.DamageResistance
+import fi.majavapaja.mcombat.common.capability.DamageResistanceProvider
+import fi.majavapaja.mcombat.common.capability.DamageType
+import fi.majavapaja.mcombat.common.capability.DamageTypeProvider
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import net.minecraft.enchantment.EnchantmentHelper
@@ -60,23 +64,23 @@ private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Flo
   val resistances = ArrayList<DamageResistance?>()
 
   val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
-  if (naturalResistance?.type == damageType.type) {
+  if (naturalResistance?.damageType == damageType) {
     resistances.add(naturalResistance)
   }
 
   resistances.addAll(
       entity.armorInventoryList
-          .filter { DamageResistanceProvider.getDamageResistance(it)?.type == damageType.type }
+          .filter { DamageResistanceProvider.getDamageResistance(it)?.damageType == damageType }
           .map { DamageResistanceProvider.getDamageResistance(it)}
   )
 
-  if (damageType.type == "rotten") resistances.addAll(getEnchantmentResistance(entity))
+  if (damageType == DamageType("rotten")) resistances.addAll(getEnchantmentResistance(entity))
 
   if (
       entity.activePotionEffects.find { it.effectName == ModEffects.resistance.name } != null &&
-      damageType.type == "rotten"
+      damageType == DamageType("rotten")
   ) {
-    resistances.add(DamageResistance("rotten", -1f))
+    resistances.add(DamageResistance(DamageType("rotten"), -1f))
   }
 
   var resistance = 0f
@@ -90,7 +94,7 @@ private fun getEnchantmentResistance(entity: Entity): ArrayList<DamageResistance
 
   for (armorPiece in entity.armorInventoryList) {
     val enchantmentLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RottenResistance, armorPiece)
-    resistances.add(DamageResistance("rotten", enchantmentLevel * -0.05f))
+    resistances.add(DamageResistance(DamageType("rotten"), enchantmentLevel * -0.05f))
   }
 
   return resistances
