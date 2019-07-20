@@ -28,7 +28,7 @@ class MajavaBlock : BaseBlock(
   name = "majava_block",
   creativeTab = Main.creativeTab,
   material = Material.ROCK,
-  layer = BlockRenderLayer.SOLID
+  layer = BlockRenderLayer.TRANSLUCENT
 ) {
   init {
     println("Initializing MajavaBlock")
