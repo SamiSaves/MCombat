@@ -6,6 +6,7 @@
     "north": "mcombat:blocks/majava_block",
     "east": "mcombat:blocks/majava_block",
     "south": "mcombat:blocks/majava_block",
-    "west": "mcombat:blocks/majava_block"
+    "west": "mcombat:blocks/majava_block",
+    "particle": "mcombat:blocks/majava_block"
   }
 }
