@@ -13,8 +13,14 @@ import net.minecraft.entity.projectile.EntityArrow
 import net.minecraft.util.DamageSource
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
+val ignoredDamageSources = listOf(
+  DamageSource.FALL,
+  DamageSource.DROWN,
+  DamageSource.OUT_OF_WORLD
+)
+
 fun onLivingHurtEvent(event: LivingHurtEvent) {
-  if (event.source == DamageSource.FALL || event.source == DamageSource.DROWN) return
+  if (ignoredDamageSources.contains(event.source)) return
 
   event.isCanceled = true
   val entity = event.entity as EntityLivingBase

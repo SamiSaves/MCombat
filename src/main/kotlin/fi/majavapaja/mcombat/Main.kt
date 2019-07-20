@@ -1,6 +1,8 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.common.command.FooCommand
 import fi.majavapaja.mcombat.common.item.ModItems
+import net.minecraft.command.CommandBase
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.Mod
@@ -8,6 +10,7 @@ import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 
 const val modId = "mcombat"
 const val modName = "MCombat"
@@ -47,4 +50,9 @@ object Main {
 	fun init(event: FMLPostInitializationEvent) {
 		proxy.postInit(event)
 	}
+
+  @Mod.EventHandler
+  fun serverStart(event: FMLServerStartingEvent) {
+    event.registerServerCommand(FooCommand())
+  }
 }
