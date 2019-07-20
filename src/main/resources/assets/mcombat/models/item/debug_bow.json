@@ -1,7 +1,7 @@
 {
 	"parent": "item/bow",
 	"textures": {
-		"layer0": "majavapajamcombat:items/debug_bow"
+		"layer0": "mcombat:items/debug_bow"
 	},
 	"overrides": [
 		{
@@ -9,21 +9,21 @@
 				"pulling": 1,
 				"pull": 0
 			},
-			"model": "majavapajamcombat:item/debug_bow_pull_0"
+			"model": "mcombat:item/debug_bow_pull_0"
 		},
 		{
 			"predicate": {
 				"pulling": 1,
 				"pull": 0.5
 			},
-			"model": "majavapajamcombat:item/debug_bow_pull_1"
+			"model": "mcombat:item/debug_bow_pull_1"
 		},
 		{
 			"predicate": {
 				"pulling": 1,
 				"pull": 0.9
 			},
-			"model": "majavapajamcombat:item/debug_bow_pull_2"
+			"model": "mcombat:item/debug_bow_pull_2"
 		}
 	]
 }

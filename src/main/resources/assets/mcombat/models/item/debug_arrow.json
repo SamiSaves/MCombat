@@ -1,6 +1,6 @@
 {
 	"parent": "item/arrow",
 	"textures": {
-		"layer0": "majavapajamcombat:items/debug_arrow"
+		"layer0": "mcombat:items/debug_arrow"
 	}
 }

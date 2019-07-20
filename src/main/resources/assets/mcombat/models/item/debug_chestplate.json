@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "majavapajamcombat:items/debug_chestplate"
+		"layer0": "mcombat:items/debug_chestplate"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "majavapajamcombat:items/debug_sword"
+		"layer0": "mcombat:items/debug_sword"
 	}
 }
