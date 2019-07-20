@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 
-const val modId = "majavapajamcombat"
+const val modId = "mcombat"
 const val modName = "MCombat"
 const val version = "0.0.1"
 
@@ -30,7 +30,7 @@ object Main {
 	val creativeTab: CreativeTabs = object : CreativeTabs(modId) {
 		override fun getIconItemStack() = ItemStack(ModItems.majavapaja)
 		override fun getTabIconItem() = this.iconItemStack
-		override fun getTabLabel(): String = modName
+		override fun getTabLabel(): String = modId
 	}
 
 	@Mod.EventHandler
