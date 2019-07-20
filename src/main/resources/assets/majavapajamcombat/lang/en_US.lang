@@ -1,5 +1,4 @@
-itemGroup.majavapajamcombat=MCombat
-
+itemGroup.mcombat=MCombat
 item.majavapaja.name=Majavapaja
 item.debug_sword.name=Debug Sword
 item.debug_chestplate.name=Debug Chestplate
