@@ -1,5 +1,7 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.capability.DamageResistance
+import fi.majavapaja.mcombat.common.capability.DamageResistanceProvider
 import fi.majavapaja.mcombat.common.capability.DamageType
 import fi.majavapaja.mcombat.common.capability.DamageTypeProvider
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
@@ -14,7 +16,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemSword
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.fml.common.Mod
@@ -28,9 +29,8 @@ object Damage {
 
   fun initialize() {
     DamageTypeProvider.register()
-    CapabilityManager.INSTANCE.register(DamageResistance::class.java, DamageResistanceStorage, DamageResistanceFactory)
+    DamageResistanceProvider.register()
     MinecraftForge.EVENT_BUS.register(this)
-    println("Initialized damage stuffs")
   }
 
   @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -44,10 +44,10 @@ object Damage {
       val damageResistance: DamageResistance
 
       if (entity is EntityZombie) {
-        damageResistance = DamageResistance("holy", 1f)
+        damageResistance = DamageResistance(DamageType("holy"), 1f)
         damageType.type = "rotten"
       } else {
-        damageResistance = DamageResistance()
+        damageResistance = DamageResistance(DamageType())
       }
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
@@ -69,14 +69,12 @@ object Damage {
 
       event.addCapability(damageTypeResource, DamageTypeProvider(damageType))
     } else if (item is ItemArmor) {
-      println("This armor is ${item.armorMaterial}")
-
       val damageResistance = when (item.registryName) {
-        ModItems.debugChestplate.registryName -> DamageResistance("rotten", -0.4f)
-        ModItems.debugLeggings.registryName -> DamageResistance("rotten", -0.35f)
-        ModItems.debugHelmet.registryName -> DamageResistance("rotten", -0.15f)
-        ModItems.debugBoots.registryName -> DamageResistance("rotten", -0.1f)
-        else -> DamageResistance()
+        ModItems.debugChestplate.registryName -> DamageResistance(DamageType("rotten"), -0.4f)
+        ModItems.debugLeggings.registryName -> DamageResistance(DamageType("rotten"), -0.35f)
+        ModItems.debugHelmet.registryName -> DamageResistance(DamageType("rotten"), -0.15f)
+        ModItems.debugBoots.registryName -> DamageResistance(DamageType("rotten"), -0.1f)
+        else -> DamageResistance(DamageType())
       }
 
       event.addCapability(damageResistanceResource, DamageResistanceProvider(damageResistance))
