@@ -1,6 +1,7 @@
-package fi.majavapaja.mcombat.common.item
+package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
+import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
@@ -8,7 +9,7 @@ import net.minecraft.item.ItemArrow
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-class ArrowBase(private val name: String): ItemArrow() {
+class Arrow(private val name: String, val damage: HashMap<DamageType, Float>): ItemArrow() {
   init {
     setRegistryName(name)
     unlocalizedName = name

@@ -1,16 +1,18 @@
-package fi.majavapaja.mcombat.common.item
+package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
+import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.modId
 import net.minecraft.init.SoundEvents
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.ItemArmor
 import net.minecraftforge.common.util.EnumHelper
 
-class ArmorBase(
+class Armor(
     private val name: String,
     armorMaterial: ArmorMaterial,
-    equipmentSlot: EntityEquipmentSlot
+    equipmentSlot: EntityEquipmentSlot,
+    val armorPoints: HashMap<DamageType, Float>
 ): ItemArmor(armorMaterial, 0, equipmentSlot) {
   companion object {
     val debugMaterial = EnumHelper.addArmorMaterial(

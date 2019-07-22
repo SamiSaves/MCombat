@@ -1,9 +1,10 @@
-package fi.majavapaja.mcombat.common.item
+package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
+import fi.majavapaja.mcombat.common.combat.DamageType
 import net.minecraft.item.ItemSword
 
-class SwordBase(private val name: String, toolMaterial: ToolMaterial): ItemSword(toolMaterial) {
+class Sword(private val name: String, toolMaterial: ToolMaterial, val damage: HashMap<DamageType, Float>): ItemSword(toolMaterial) {
   init {
     setRegistryName(name)
     unlocalizedName = name

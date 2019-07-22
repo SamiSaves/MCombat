@@ -1,9 +1,9 @@
-package fi.majavapaja.mcombat.common.item
+package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
 import net.minecraft.item.Item
 
-class ItemBase(val name: String): Item() {
+open class Item(val name: String): Item() {
   init {
     setRegistryName(name)
     unlocalizedName = name
