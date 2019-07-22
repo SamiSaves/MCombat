@@ -4,7 +4,10 @@ import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
 import net.minecraft.item.ItemBow
 
-class Bow(private val name: String, val damage: HashMap<DamageType, Float>): ItemBow() {
+class Bow(
+    private val name: String,
+    override val damage: HashMap<DamageType, Float>
+): ItemBow(), Weapon {
   init {
     setRegistryName(name)
     unlocalizedName = name

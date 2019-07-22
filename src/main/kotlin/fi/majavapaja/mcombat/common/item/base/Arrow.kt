@@ -9,7 +9,10 @@ import net.minecraft.item.ItemArrow
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-class Arrow(private val name: String, val damage: HashMap<DamageType, Float>): ItemArrow() {
+class Arrow(
+    private val name: String,
+    override val damage: HashMap<DamageType, Float>
+): ItemArrow(), Weapon {
   init {
     setRegistryName(name)
     unlocalizedName = name
