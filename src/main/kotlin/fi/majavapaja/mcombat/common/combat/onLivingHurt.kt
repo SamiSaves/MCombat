@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.combat
 
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
+import fi.majavapaja.mcombat.common.item.base.Weapon
 import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
 import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
 import net.minecraft.entity.Entity
@@ -43,18 +44,25 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
 
 private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
   if (immediateSource is EntityArrow) {
-    // TODO Get arrow damage type
-    hashMapOf(DamageType.Normal to 4f)
+    when (immediateSource) {
+      is Weapon -> immediateSource.damage
+      else -> hashMapOf(DamageType.Normal to 4f)
+    }
+    // TODO: Get bow Damage
   } else if (trueSource is EntityLivingBase) {
-    val weapon = trueSource.heldItemMainhand
+    val mainHandItem = trueSource.heldItemMainhand
 
-    if (!weapon.isEmpty) {
-      if (isMinecraftItem(weapon.item)) {
-        getToolDamage(weapon.item)
-      } else {
-        hashMapOf(DamageType.Normal to 2f)
+    if (!mainHandItem.isEmpty) {
+      val weapon = mainHandItem.item
+
+      when {
+        isMinecraftItem(weapon) -> getToolDamage(weapon)
+        weapon is Weapon -> weapon.damage
+        else -> hashMapOf(DamageType.Normal to 2f)
       }
     } else {
+      // TODO Get natural damage from entity
+
       hashMapOf(DamageType.Normal to 2f)
     }
   } else {
