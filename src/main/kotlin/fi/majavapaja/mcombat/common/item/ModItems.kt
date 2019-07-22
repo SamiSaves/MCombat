@@ -45,5 +45,5 @@ object ModItems {
     debugArrow.registerItemModel()
   }
 
-  fun isMinecraftItem(item: Item) = item.registryName.toString().startsWith("minecraft:")
+  fun isMinecraftItem(item: Item): Boolean = item.registryName.toString().startsWith("minecraft:")
 }
