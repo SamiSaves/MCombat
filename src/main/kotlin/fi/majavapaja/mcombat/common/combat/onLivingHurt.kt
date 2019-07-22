@@ -1,15 +1,13 @@
 package fi.majavapaja.mcombat.common.combat
 
-import fi.majavapaja.mcombat.common.capability.DamageResistance
-import fi.majavapaja.mcombat.common.capability.DamageResistanceProvider
-import fi.majavapaja.mcombat.common.capability.DamageType
-import fi.majavapaja.mcombat.common.capability.DamageTypeProvider
-import fi.majavapaja.mcombat.common.effect.ModEffects
-import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
-import net.minecraft.enchantment.EnchantmentHelper
+import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
+import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
+import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
+import net.minecraft.item.ItemArmor
+import net.minecraft.item.ItemStack
 import net.minecraft.util.DamageSource
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
@@ -23,86 +21,69 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   if (ignoredDamageSources.contains(event.source)) return
 
   event.isCanceled = true
+
   val entity = event.entity as EntityLivingBase
-  val damageType = getDamageType(event.source.trueSource, event.source.immediateSource)
-  val resistance = getResistance(entity, damageType)
-  var damage = when (event.source.trueSource) {
-    is EntityLivingBase -> 10f
-    else -> 2f
+  val damage = getDamage(event.source.trueSource, event.source.immediateSource)
+  val armorPoints = getArmorPoints(entity)
+  var damageAmount = 0f
+
+  for ((damageType, amount) in damage) {
+    damageAmount += amount - ((armorPoints[damageType] ?: 0f) / 10)
   }
 
-  damage += resistance * damage
-  damage = if (damage < 0f) {
+  damageAmount = if (damageAmount < 0f) {
     0f
   } else {
-    damage
+    damageAmount
   }
 
-  entity.health -= damage
-  println("Someone was hit with ${damageType.type} for $damage points of damage. Someone had $resistance resistance")
+  entity.health -= damageAmount
+  println("Someone was hit with $damage for $damageAmount points of damage. Someone had $armorPoints resistance")
 }
 
-private fun getDamageType(trueSource: Entity?, immediateSource: Entity?): DamageType {
-  var damageType: DamageType? = null
-
+private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
   if (immediateSource is EntityArrow) {
-    damageType = DamageTypeProvider.getDamageType(immediateSource)
+    // TODO Get arrow damage type
+    hashMapOf(DamageType.Normal to 4f)
   } else if (trueSource is EntityLivingBase) {
     val weapon = trueSource.heldItemMainhand
 
-    damageType = if (!weapon.isEmpty) {
-      val enchantments = EnchantmentHelper.getEnchantments(weapon)
-
-      if (enchantments.containsKey(ModEnchantments.HolyDamage)) {
-        DamageType("holy")
+    if (!weapon.isEmpty) {
+      if (isMinecraftItem(weapon.item)) {
+        getToolDamage(weapon.item)
       } else {
-        DamageTypeProvider.getDamageType(weapon)
+        hashMapOf(DamageType.Normal to 2f)
       }
     } else {
-      DamageTypeProvider.getDamageType(trueSource)
+      hashMapOf(DamageType.Normal to 2f)
     }
+  } else {
+    hashMapOf(DamageType.Normal to 2f)
   }
 
-  return damageType ?: DamageType()
+private fun getArmorPoints(entity: EntityLivingBase): HashMap<DamageType, Float> {
+  val armorPoints = HashMap<DamageType, Float>()
+
+  // TODO Get entity natural armor points
+
+  entity.armorInventoryList.map { addArmorPoints(it, armorPoints) }
+
+  return armorPoints
 }
 
-private fun getResistance(entity: EntityLivingBase, damageType: DamageType): Float {
-  val resistances = ArrayList<DamageResistance?>()
+private fun addArmorPoints(itemStack: ItemStack, armorPoints: HashMap<DamageType, Float>) {
+  if (itemStack.isEmpty || itemStack.item !is ItemArmor) return
+  val armorPiecePoints = getArmorPiecePoints(itemStack.item as ItemArmor)
 
-  val naturalResistance = DamageResistanceProvider.getDamageResistance(entity)
-  if (naturalResistance?.damageType == damageType) {
-    resistances.add(naturalResistance)
+  for ((damageType, amount) in armorPiecePoints) {
+    armorPoints.merge(damageType, amount) { f1, f2 -> f1 + f2 }
   }
-
-  resistances.addAll(
-      entity.armorInventoryList
-          .filter { DamageResistanceProvider.getDamageResistance(it)?.damageType == damageType }
-          .map { DamageResistanceProvider.getDamageResistance(it)}
-  )
-
-  if (damageType == DamageType("rotten")) resistances.addAll(getEnchantmentResistance(entity))
-
-  if (
-      entity.activePotionEffects.find { it.effectName == ModEffects.resistance.name } != null &&
-      damageType == DamageType("rotten")
-  ) {
-    resistances.add(DamageResistance(DamageType("rotten"), -1f))
-  }
-
-  var resistance = 0f
-  resistances.filterNotNull().map { resistance += it.amount }
-
-  return resistance
 }
 
-private fun getEnchantmentResistance(entity: Entity): ArrayList<DamageResistance> {
-  val resistances = ArrayList<DamageResistance>()
-
-  for (armorPiece in entity.armorInventoryList) {
-    val enchantmentLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RottenResistance, armorPiece)
-    resistances.add(DamageResistance(DamageType("rotten"), enchantmentLevel * -0.05f))
+private fun getArmorPiecePoints(armor: ItemArmor) =
+  if (isMinecraftItem(armor)) {
+    getMinecraftArmorPoints(armor)
+  } else {
+    hashMapOf(DamageType.Normal to 0f)
   }
-
-  return resistances
-}
 
