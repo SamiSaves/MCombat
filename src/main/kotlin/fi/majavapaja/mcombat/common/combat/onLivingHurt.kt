@@ -15,7 +15,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent
 val ignoredDamageSources = listOf(
   DamageSource.FALL,
   DamageSource.DROWN,
-  DamageSource.OUT_OF_WORLD
+  DamageSource.OUT_OF_WORLD,
+  DamageSource.ON_FIRE
 )
 
 fun onLivingHurtEvent(event: LivingHurtEvent) {
