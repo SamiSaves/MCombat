@@ -8,7 +8,7 @@ class Sword(
     private val name: String,
     toolMaterial: ToolMaterial,
     override val damage: HashMap<DamageType, Float>
-): ItemSword(toolMaterial), Weapon {
+): ItemSword(toolMaterial), IWeapon {
   init {
     setRegistryName(name)
     unlocalizedName = name

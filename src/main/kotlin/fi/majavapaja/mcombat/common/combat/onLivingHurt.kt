@@ -1,7 +1,7 @@
 package fi.majavapaja.mcombat.common.combat
 
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
-import fi.majavapaja.mcombat.common.item.base.Weapon
+import fi.majavapaja.mcombat.common.item.base.IWeapon
 import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
 import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
 import net.minecraft.entity.Entity
@@ -45,7 +45,7 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
 private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
   if (immediateSource is EntityArrow) {
     when (immediateSource) {
-      is Weapon -> immediateSource.damage
+      is IWeapon -> immediateSource.damage
       else -> hashMapOf(DamageType.Normal to 4f)
     }
     // TODO: Get bow Damage
@@ -57,7 +57,7 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
 
       when {
         isMinecraftItem(weapon) -> getToolDamage(weapon)
-        weapon is Weapon -> weapon.damage
+        weapon is IWeapon -> weapon.damage
         else -> hashMapOf(DamageType.Normal to 2f)
       }
     } else {

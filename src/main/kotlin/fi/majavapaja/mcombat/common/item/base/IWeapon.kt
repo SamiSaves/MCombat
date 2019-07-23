@@ -2,6 +2,6 @@ package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.common.combat.DamageType
 
-interface Weapon {
+interface IWeapon {
   val damage: HashMap<DamageType, Float>
 }

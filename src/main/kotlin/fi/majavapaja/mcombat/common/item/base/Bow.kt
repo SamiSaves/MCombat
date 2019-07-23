@@ -7,7 +7,7 @@ import net.minecraft.item.ItemBow
 class Bow(
     private val name: String,
     override val damage: HashMap<DamageType, Float>
-): ItemBow(), Weapon {
+): ItemBow(), IWeapon {
   init {
     setRegistryName(name)
     unlocalizedName = name

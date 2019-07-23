@@ -12,7 +12,7 @@ import net.minecraft.world.World
 class Arrow(
     private val name: String,
     override val damage: HashMap<DamageType, Float>
-): ItemArrow(), Weapon {
+): ItemArrow(), IWeapon {
   init {
     setRegistryName(name)
     unlocalizedName = name
