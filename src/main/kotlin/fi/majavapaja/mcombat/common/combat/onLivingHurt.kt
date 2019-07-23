@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
 import fi.majavapaja.mcombat.common.item.base.IWeapon
@@ -64,7 +65,7 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
     } else {
       if (isMinecraftMonster(trueSource)) {
         println("This is a minecraft monster ${trueSource.name}")
-        hashMapOf(DamageType.Normal to 2f)
+        getMonsterDamage(trueSource)
       } else {
         println("This is not a minecraft monster ${trueSource.name}")
         hashMapOf(DamageType.Normal to 2f)
