@@ -1,12 +1,12 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.block.BaseBlock
 import fi.majavapaja.mcombat.common.block.MajavaBlock
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
-import fi.majavapaja.mcombat.common.entity.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.item.Item
