@@ -1,17 +1,14 @@
 package fi.majavapaja.mcombat.common.combat
 
-import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterArmor
+import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
 import fi.majavapaja.mcombat.common.item.base.IWeapon
-import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
 import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
-import net.minecraft.item.ItemArmor
-import net.minecraft.item.ItemStack
 import net.minecraft.util.DamageSource
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
@@ -75,36 +72,3 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
   } else {
     hashMapOf(DamageType.Normal to 2f)
   }
-
-private fun getArmorPoints(entity: EntityLivingBase): HashMap<DamageType, Float> {
-  val armorPoints = HashMap<DamageType, Float>()
-
-  if (isMinecraftMonster(entity)) {
-    mergeArmor(armorPoints, getMonsterArmor(entity))
-  }
-
-  entity.armorInventoryList.map { addArmorPoints(it, armorPoints) }
-
-  return armorPoints
-}
-
-private fun addArmorPoints(itemStack: ItemStack, armorPoints: HashMap<DamageType, Float>) {
-  if (itemStack.isEmpty || itemStack.item !is ItemArmor) return
-  val armorPiecePoints = getArmorPiecePoints(itemStack.item as ItemArmor)
-
-  mergeArmor(armorPoints, armorPiecePoints)
-}
-
-private fun mergeArmor(map1: HashMap<DamageType, Float>, map2: HashMap<DamageType, Float>) {
-  for ((damageType, amount) in map2) {
-    map1.merge(damageType, amount) { f1, f2 -> f1 + f2 }
-  }
-}
-
-private fun getArmorPiecePoints(armor: ItemArmor) =
-  if (isMinecraftItem(armor)) {
-    getMinecraftArmorPoints(armor)
-  } else {
-    hashMapOf(DamageType.Normal to 0f)
-  }
-
