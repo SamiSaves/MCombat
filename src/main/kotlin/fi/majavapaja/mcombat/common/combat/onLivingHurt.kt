@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
 import fi.majavapaja.mcombat.common.item.base.IWeapon
 import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
@@ -61,9 +62,13 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
         else -> hashMapOf(DamageType.Normal to 2f)
       }
     } else {
-      // TODO Get natural damage from entity
-
-      hashMapOf(DamageType.Normal to 2f)
+      if (isMinecraftMonster(trueSource)) {
+        println("This is a minecraft monster ${trueSource.name}")
+        hashMapOf(DamageType.Normal to 2f)
+      } else {
+        println("This is not a minecraft monster ${trueSource.name}")
+        hashMapOf(DamageType.Normal to 2f)
+      }
     }
   } else {
     hashMapOf(DamageType.Normal to 2f)
