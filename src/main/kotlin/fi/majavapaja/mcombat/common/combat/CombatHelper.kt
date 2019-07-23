@@ -15,7 +15,7 @@ object CombatHelper {
 
   private fun addNaturalEntityArmor(
       entity: EntityLivingBase,
-      currentArmor: HashMap<DamageType, Float> = HashMap<DamageType, Float>()
+      currentArmor: HashMap<DamageType, Float> = HashMap()
   ): HashMap<DamageType, Float> =
       when {
         isMinecraftMonster(entity) -> mergeHashMap(currentArmor, getMonsterArmor(entity))
@@ -24,7 +24,7 @@ object CombatHelper {
 
   private fun addEntityEquipmentArmor(
       entity: EntityLivingBase,
-      currentArmor: HashMap<DamageType, Float> = HashMap<DamageType, Float>()
+      currentArmor: HashMap<DamageType, Float> = HashMap()
   ): HashMap<DamageType, Float> {
     var newTotalArmor = HashMap<DamageType, Float>()
     newTotalArmor.putAll(currentArmor)
