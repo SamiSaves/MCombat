@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterArmor
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
@@ -78,7 +79,9 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
 private fun getArmorPoints(entity: EntityLivingBase): HashMap<DamageType, Float> {
   val armorPoints = HashMap<DamageType, Float>()
 
-  // TODO Get entity natural armor points
+  if (isMinecraftMonster(entity)) {
+    mergeArmor(armorPoints, getMonsterArmor(entity))
+  }
 
   entity.armorInventoryList.map { addArmorPoints(it, armorPoints) }
 
@@ -89,8 +92,12 @@ private fun addArmorPoints(itemStack: ItemStack, armorPoints: HashMap<DamageType
   if (itemStack.isEmpty || itemStack.item !is ItemArmor) return
   val armorPiecePoints = getArmorPiecePoints(itemStack.item as ItemArmor)
 
-  for ((damageType, amount) in armorPiecePoints) {
-    armorPoints.merge(damageType, amount) { f1, f2 -> f1 + f2 }
+  mergeArmor(armorPoints, armorPiecePoints)
+}
+
+private fun mergeArmor(map1: HashMap<DamageType, Float>, map2: HashMap<DamageType, Float>) {
+  for ((damageType, amount) in map2) {
+    map1.merge(damageType, amount) { f1, f2 -> f1 + f2 }
   }
 }
 
