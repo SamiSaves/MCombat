@@ -1,16 +1,20 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.CommonProxy
 import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
 import fi.majavapaja.mcombat.common.item.base.IWeapon
 import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
+import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
 import net.minecraft.util.DamageSource
+import net.minecraft.util.EnumParticleTypes
 import net.minecraftforge.event.entity.living.LivingHurtEvent
+import net.minecraftforge.fml.common.network.NetworkRegistry
 
 val ignoredDamageSources = listOf(
   DamageSource.FALL,
@@ -28,6 +32,10 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   val damage = getDamage(event.source.trueSource, event.source.immediateSource)
   val armorPoints = getArmorPoints(entity)
   var damageAmount = 0f
+
+  // Send particles to all nearby players
+  val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
+  CommonProxy.particleNetwork.sendToAllAround(ParticleMessage(entity.posX, entity.posY, entity.posZ, EnumParticleTypes.END_ROD), particleTargetPoint)
 
   for ((damageType, amount) in damage) {
     damageAmount += amount - ((armorPoints[damageType] ?: 0f) / 10)

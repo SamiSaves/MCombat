@@ -9,6 +9,8 @@ import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
+import fi.majavapaja.mcombat.common.message.ParticleMessage
+import fi.majavapaja.mcombat.common.message.ParticleMessageHandler
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.ItemBlock
@@ -21,17 +23,28 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
 @Suppress("unused")
 open class CommonProxy(val side: Side) {
+  companion object {
+    val particleNetwork = NetworkRegistry.INSTANCE.newSimpleChannel(modId)!!
+  }
+
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
     Damage.initialize()
 
     registerBlock(MajavaBlock())
+    particleNetwork.registerMessage(
+        ParticleMessageHandler::class.java,
+        ParticleMessage::class.java,
+        100,
+        Side.CLIENT
+    )
   }
 
   fun registerBlock(block: BaseBlock) {
