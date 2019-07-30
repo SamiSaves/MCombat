@@ -33,9 +33,6 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   val armorPoints = getArmorPoints(entity)
   var damageAmount = 0f
 
-  // Send particles to all nearby players
-  val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
-  CommonProxy.particleNetwork.sendToAllAround(ParticleMessage(entity.posX, entity.posY, entity.posZ, EnumParticleTypes.END_ROD), particleTargetPoint)
 
   for ((damageType, amount) in damage) {
     damageAmount += amount - ((armorPoints[damageType] ?: 0f) / 10)
@@ -48,6 +45,8 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   }
 
   entity.health -= damageAmount
+
+  createParticles(entity, damage, damageAmount)
   println("Someone was hit with $damage for $damageAmount points of damage. Someone had $armorPoints resistance")
 }
 
@@ -81,3 +80,15 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
   } else {
     hashMapOf(DamageType.Normal to 2f)
   }
+
+private fun createParticles (entity: EntityLivingBase, damage: HashMap<DamageType, Float>, amount: Float) {
+  // Send particles to all nearby players
+  val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
+    CommonProxy.particleNetwork.sendToAllAround(ParticleMessage(
+        entity.posX,
+        entity.posY,
+        entity.posZ,
+        amount,
+        damage.map { it.key }
+    ), particleTargetPoint)
+}
