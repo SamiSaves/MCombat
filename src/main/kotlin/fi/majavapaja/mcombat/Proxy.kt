@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.client.particle.FireAttackParticle
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.block.BaseBlock
 import fi.majavapaja.mcombat.common.block.MajavaBlock
@@ -11,9 +12,12 @@ import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import fi.majavapaja.mcombat.common.message.ParticleMessageHandler
+import net.minecraft.client.Minecraft
+import net.minecraft.client.particle.Particle
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.ItemBlock
+import net.minecraft.world.World
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
@@ -92,6 +96,18 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
   @SideOnly(Side.CLIENT)
   fun registerItems(event: ModelRegistryEvent) {
     ModItems.registerModels()
+  }
+
+  fun spawnParticle(
+      world: World,
+      x: Double,
+      y: Double,
+      z: Double,
+      xSpeed: Double,
+      ySpeed: Double,
+      zSpeed: Double
+      // ...data: Int
+  ) {
   }
 }
 

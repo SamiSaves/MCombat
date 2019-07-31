@@ -1,5 +1,7 @@
 package fi.majavapaja.mcombat.common.message
 
+import fi.majavapaja.mcombat.ClientProxy
+import fi.majavapaja.mcombat.client.particle.FireAttackParticle
 import fi.majavapaja.mcombat.common.combat.DamageType
 import io.netty.buffer.ByteBuf
 import io.netty.util.CharsetUtil
@@ -78,7 +80,12 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
         val z = message.z - Random.nextDouble(-.5, .5)
         val speed = .0
 
-        world.spawnParticle(particleType, false, x, y, z, speed, speed, speed)
+        val minecraft = Minecraft.getMinecraft()
+        val effect = FireAttackParticle(world, x, y, z, speed, speed, speed, minecraft.textureManager)
+
+       // What is this?
+        minecraft.effectRenderer.addEffect(effect)
+//        world.spawnParticle(particleType, false, x, y, z, speed, speed, speed)
       }
     }
   }
