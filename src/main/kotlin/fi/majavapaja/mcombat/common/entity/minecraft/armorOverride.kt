@@ -8,10 +8,10 @@ fun getMonsterArmor (entity: EntityLivingBase): HashMap<DamageType, Float> =
   when (entity::class) {
     EntityCreeper::class -> hashMapOf(DamageType.Fire to -40f, DamageType.Normal to 20f)
     EntityEnderman::class ->  hashMapOf(DamageType.Normal to 60f, DamageType.Magic to 40f)
-    EntitySkeleton::class -> hashMapOf(DamageType.Earth to -40f, DamageType.Normal to -20f)
+    EntitySkeleton::class -> hashMapOf(DamageType.Air to -40f, DamageType.Normal to -20f)
     EntitySnowman::class -> hashMapOf(DamageType.Normal to 50f)
     EntitySpider::class -> hashMapOf(DamageType.Normal to 20f)
-    EntityZombie::class -> hashMapOf(DamageType.Earth to -40f, DamageType.Normal to 40f)
+    EntityZombie::class -> hashMapOf(DamageType.Air to -40f, DamageType.Normal to 40f)
     EntityZombieVillager::class -> hashMapOf(DamageType.Normal to 40f)
     else -> hashMapOf(DamageType.Normal to 0f)
   }
