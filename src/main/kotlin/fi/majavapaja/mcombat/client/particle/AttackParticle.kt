@@ -10,8 +10,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.client.renderer.vertex.VertexFormat
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
@@ -26,15 +24,14 @@ abstract class AttackParticle(
     xSpeedIn: Double,
     ySpeedIn: Double,
     zSpeedIn: Double,
-    protected var textureManager: TextureManager
+    private var textureManager: TextureManager
 ): Particle(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn) {
-  protected var life = 0
-  protected var lifeTime = 16
-  protected var size = .25f
-  protected var animPhases: Int = 16
+  private var life = 0
+  private var lifeTime = 16
+  private var size = .25f
+  private var animPhases: Int = 16
   protected abstract val texture: ResourceLocation
-  protected val vertexFormat: VertexFormat
-    get() = VERTEX_FORMAT
+  private val vertexFormat = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
 
   init {
     height = 1f
@@ -44,7 +41,8 @@ abstract class AttackParticle(
     size -= Random.nextDouble(0.1).toFloat()
   }
 
-  override fun renderParticle(worldRendererIn: BufferBuilder, entityIn: Entity?, partialTicks: Float, rotationX: Float, rotationZ: Float, rotationYZ: Float, rotationXY: Float, rotationXZ: Float) {
+  // The rotation parameters are numbers that ensure that the 2D particle is always rendered towards the player.
+  override fun renderParticle(buffer: BufferBuilder, entityIn: Entity?, partialTicks: Float, rotationX: Float, rotationZ: Float, rotationYZ: Float, rotationXY: Float, rotationXZ: Float) {
     val progress = (life + partialTicks) / lifeTime
     val currentPhase = (progress * animPhases).toInt()
 
@@ -52,71 +50,67 @@ abstract class AttackParticle(
       this.textureManager.bindTexture(texture)
 
       val halfSize = 0.5f * this.size
-      val f5 = (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX).toFloat()
-      val f6 = (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY).toFloat()
-      val f7 = (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ).toFloat()
+      val weirdX = (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX).toFloat()
+      val weirdY = (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY).toFloat()
+      val weirdZ = (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ).toFloat()
 
-      val rot1 = rotationX * halfSize
-      val rot2 = rotationXY * halfSize
+      val rotX = rotationX * halfSize
+      val rotXY = rotationXY * halfSize
 
-      val f17 = (f5 - rot1 - rot2).toDouble()
-      val f8 =  (f5 - rot1 + rot2).toDouble()
-      val f11 = (f5 + rot1 + rot2).toDouble()
-      val f14 = (f5 + rot1 - rot2).toDouble()
+      val weirdX1 = (weirdX - rotX - rotXY).toDouble()
+      val weirdX2 = (weirdX - rotX + rotXY).toDouble()
+      val weirdX3 = (weirdX + rotX + rotXY).toDouble()
+      val weirdX4 = (weirdX + rotX - rotXY).toDouble()
 
-      val rot3 = rotationZ * halfSize * height
+      val rotZ = rotationZ * halfSize * height
 
-      val f9 =  (f6 + rot3).toDouble()
-      val f12 = (f6 + rot3).toDouble()
-      val f15 = (f6 - rot3).toDouble()
-      val f18 = (f6 - rot3).toDouble()
+      val weirdY1 = (weirdY - rotZ).toDouble()
+      val weirdY2 = (weirdY + rotZ).toDouble()
+      val weirdY3 = (weirdY + rotZ).toDouble()
+      val weirdY4 = (weirdY - rotZ).toDouble()
 
-      val rot4 = rotationYZ * halfSize
-      val rot5 = rotationXZ * halfSize
+      val rotYZ = rotationYZ * halfSize
+      val rotXZ = rotationXZ * halfSize
 
-      val f10 = (f7 - rot4 + rot5).toDouble()
-      val f13 = (f7 + rot4 + rot5).toDouble()
-      val f16 = (f7 + rot4 - rot5).toDouble()
-      val f19 = (f7 - rot4 - rot5).toDouble()
+      val weirdZ1 = (weirdZ - rotYZ - rotXZ).toDouble()
+      val weirdZ2 = (weirdZ - rotYZ + rotXZ).toDouble()
+      val weirdZ3 = (weirdZ + rotYZ + rotXZ).toDouble()
+      val weirdZ4 = (weirdZ + rotYZ - rotXZ).toDouble()
 
       GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
       GlStateManager.disableLighting()
       RenderHelper.disableStandardItemLighting()
-      worldRendererIn.begin(7, vertexFormat)
-      // the worldRendererIn.pos needs to be called 4 times
+      buffer.begin(7, vertexFormat)
+      // the buffer.pos needs to be called 4 times
       // The .tex seems to be the texture x and y in the texture image.
       // So this would mean that if the texture was a sprite sheet we could easily render one sprite from it
-      worldRendererIn.pos(f17, f18, f19)
+      buffer.pos(weirdX1, weirdY1, weirdZ1)
           .tex(1.0, 1.0)
           .color(particleRed, this.particleGreen, this.particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0F, 1.0F, 0.0F)
           .endVertex()
-      worldRendererIn.pos(f8, f9, f10)
+      buffer.pos(weirdX2, weirdY2, weirdZ2)
           .tex(1.0, .0)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
-      worldRendererIn.pos(f11, f12, f13)
+      buffer.pos(weirdX3, weirdY3, weirdZ3)
           .tex(.0, .0)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
-      worldRendererIn.pos(f14, f15, f16)
+      buffer.pos(weirdX4, weirdY4, weirdZ4)
           .tex(.0, 1.0)
-          .color(this.particleRed, this.particleGreen, this.particleBlue, particleAlpha)
+          .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       Tessellator.getInstance().draw()
       GlStateManager.enableLighting()
     }
-  }
-
-  override fun getBrightnessForRender(p_189214_1_: Float): Int {
-    return 61680
   }
 
   override fun onUpdate() {
@@ -126,29 +120,27 @@ abstract class AttackParticle(
     ++life
 
     move(motionX, motionY, motionZ)
-    motionY -= .04
-    if (motionY < -.08) {
-      motionY = -.08
-    }
 
-    motionX = motionToZero(motionX)
-    motionZ = motionToZero(motionZ)
+    motionY -= when {
+      motionY < -.08 -> .04
+      else -> .0
+    }
+    motionX = slowMotionDown(motionX)
+    motionZ = slowMotionDown(motionZ)
 
     if (life == lifeTime) {
       setExpired()
     }
   }
 
-  override fun getFXLayer(): Int {
-    return 3
-  }
+  override fun getFXLayer(): Int = 3
 
-  fun setRandomDirection() {
+  private fun setRandomDirection() {
     motionX = arrayOf(.1, -.1, .0).random()
     motionZ = arrayOf(.1, -.1, .0).random()
   }
 
-  private fun motionToZero(motion: Double): Double =
+  private fun slowMotionDown(motion: Double): Double =
       when {
         motion > 0 -> {
           var newMotion = motion - .02
@@ -162,8 +154,4 @@ abstract class AttackParticle(
         }
         else -> motion
       }
-
-  companion object {
-    val VERTEX_FORMAT = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
-  }
 }
