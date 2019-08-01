@@ -12,7 +12,7 @@ import net.minecraftforge.registries.IForgeRegistry
 
 object ModItems {
   val majavapaja = ItemBase("majavapaja")
-  val debugSword = Sword("debug_sword", Item.ToolMaterial.WOOD, hashMapOf(DamageType.Earth to 10f))
+  val debugSword = Sword("debug_sword", Item.ToolMaterial.WOOD, hashMapOf(DamageType.Earth to 10f, DamageType.Air to 1f, DamageType.Magic to 1f))
   val debugChestplate = Armor("debug_chestplate", Armor.debugMaterial, EntityEquipmentSlot.CHEST, hashMapOf(DamageType.Air to 2f))
   val debugLeggings = Armor("debug_leggings", Armor.debugMaterial, EntityEquipmentSlot.LEGS, hashMapOf(DamageType.Air to 2f))
   val debugBoots = Armor("debug_boots", Armor.debugMaterial, EntityEquipmentSlot.FEET, hashMapOf(DamageType.Air to 2f))

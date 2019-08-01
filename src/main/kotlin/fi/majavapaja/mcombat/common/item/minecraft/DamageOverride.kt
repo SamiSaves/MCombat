@@ -7,7 +7,7 @@ import net.minecraft.item.ItemAxe
 import net.minecraft.item.ItemSword
 import net.minecraft.item.ItemTool
 
-private fun getDamage(amount: Float) = hashMapOf(DamageType.Fire to amount)
+private fun getDamage(amount: Float) = hashMapOf(DamageType.Lightning to amount)
 
 fun getToolDamage (item: Item): HashMap<DamageType, Float> {
   val material = when (item) {

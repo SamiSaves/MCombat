@@ -25,16 +25,16 @@ enum class DamageType(val type: String) {
         else -> Normal
     }
 
-    fun getParticle(damageType: DamageType): EnumParticleTypes? =
+    fun getParticleId(damageType: DamageType): Int =
         when(damageType) {
-          Magic -> EnumParticleTypes.ENCHANTMENT_TABLE
-          Fire -> EnumParticleTypes.FLAME
-          Ice -> EnumParticleTypes.SNOWBALL
-          Water -> EnumParticleTypes.WATER_SPLASH
-          Lightning -> EnumParticleTypes.VILLAGER_ANGRY
-          Earth -> EnumParticleTypes.TOTEM
-          Air -> EnumParticleTypes.END_ROD
-          else -> null
+          Magic     -> 0
+          Fire      -> 1
+          Ice       -> 2
+          Water     -> 3
+          Lightning -> 4
+          Earth     -> 5
+          Air       -> 6
+          else      -> -1
         }
   }
 }
