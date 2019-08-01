@@ -75,10 +75,10 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
       val particleType = DamageType.getParticle(it) ?: return@forEach
 
       for (i in 1..10) {
-        val x = message.x - Random.nextDouble(-.5, .5)
-        val y = message.y + 1.5
-        val z = message.z - Random.nextDouble(-.5, .5)
-        val speed = .0
+        val x = message.x
+        val y = message.y + 1.5 - Random.nextDouble(-.5, .5)
+        val z = message.z
+        val speed = .2
 
         val minecraft = Minecraft.getMinecraft()
         val effect = FireAttackParticle(world, x, y, z, speed, speed, speed, minecraft.textureManager)

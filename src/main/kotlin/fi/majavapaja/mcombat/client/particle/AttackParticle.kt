@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
+import kotlin.random.Random
 
 @SideOnly(Side.CLIENT)
 abstract class AttackParticle(
@@ -28,15 +29,19 @@ abstract class AttackParticle(
     protected var textureManager: TextureManager
 ): Particle(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn) {
   protected var life = 0
-  protected var lifeTime = 8
+  protected var lifeTime = 16
   protected var size = .25f
-  protected var animPhases: Int = 8
+  protected var animPhases: Int = 16
   protected abstract val texture: ResourceLocation
   protected val vertexFormat: VertexFormat
     get() = VERTEX_FORMAT
 
   init {
     height = 1f
+    setRandomDirection()
+    this.motionY = .16
+
+    size -= Random.nextDouble(0.1).toFloat()
   }
 
   override fun renderParticle(worldRendererIn: BufferBuilder, entityIn: Entity?, partialTicks: Float, rotationX: Float, rotationZ: Float, rotationYZ: Float, rotationXY: Float, rotationXZ: Float) {
@@ -83,25 +88,25 @@ abstract class AttackParticle(
       // So this would mean that if the texture was a sprite sheet we could easily render one sprite from it
       worldRendererIn.pos(f17, f18, f19)
           .tex(1.0, 1.0)
-          .color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+          .color(particleRed, this.particleGreen, this.particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0F, 1.0F, 0.0F)
           .endVertex()
       worldRendererIn.pos(f8, f9, f10)
           .tex(1.0, .0)
-          .color(this.particleRed, this.particleGreen, this.particleBlue, 1.0f)
+          .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       worldRendererIn.pos(f11, f12, f13)
           .tex(.0, .0)
-          .color(this.particleRed, this.particleGreen, this.particleBlue, 1.0f)
+          .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       worldRendererIn.pos(f14, f15, f16)
           .tex(.0, 1.0)
-          .color(this.particleRed, this.particleGreen, this.particleBlue, 1.0f)
+          .color(this.particleRed, this.particleGreen, this.particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
@@ -115,19 +120,48 @@ abstract class AttackParticle(
   }
 
   override fun onUpdate() {
-    this.prevPosX = this.posX
-    this.prevPosY = this.posY
-    this.prevPosZ = this.posZ
-    ++this.life
+    prevPosX = posX
+    prevPosY = posY
+    prevPosZ = posZ
+    ++life
 
-    if (this.life == this.lifeTime) {
-      this.setExpired()
+    move(motionX, motionY, motionZ)
+    motionY -= .04
+    if (motionY < -.08) {
+      motionY = -.08
+    }
+
+    motionX = motionToZero(motionX)
+    motionZ = motionToZero(motionZ)
+
+    if (life == lifeTime) {
+      setExpired()
     }
   }
 
   override fun getFXLayer(): Int {
     return 3
   }
+
+  fun setRandomDirection() {
+    motionX = arrayOf(.1, -.1, .0).random()
+    motionZ = arrayOf(.1, -.1, .0).random()
+  }
+
+  private fun motionToZero(motion: Double): Double =
+      when {
+        motion > 0 -> {
+          var newMotion = motion - .02
+          if (newMotion < 0) newMotion = .0
+          newMotion
+        }
+        motion < 0 -> {
+          var newMotion = motion + .02
+          if (newMotion > 0) newMotion = .0
+          newMotion
+        }
+        else -> motion
+      }
 
   companion object {
     val VERTEX_FORMAT = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
