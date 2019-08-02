@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.client.particle
 
+import fi.majavapaja.mcombat.common.util.SpriteCoordinates
 import fi.majavapaja.mcombat.modId
 import net.minecraft.client.particle.Particle
 import net.minecraft.client.renderer.GlStateManager
@@ -21,24 +22,25 @@ abstract class CustomParticle(
     xCoordIn: Double,
     yCoordIn: Double,
     zCoordIn: Double,
-    private var textureManager: TextureManager
+    protected var textureManager: TextureManager
 ): Particle(worldIn, xCoordIn, yCoordIn, zCoordIn, .0, .0, .0) {
   companion object {
     val spriteSheet = ResourceLocation("$modId:textures/particle/particles.png")
+    const val spriteSheetWidth = 256.0
+    const val spriteSheetHeight = 256.0
   }
 
-  private val vertexFormat = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
+  protected val vertexFormat = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
 
   protected abstract var life: Int
   protected abstract var lifeTime: Int
   protected abstract var size: Float
   protected abstract var animPhases: Int
   protected abstract var textureId: Int
+  protected abstract var spriteCoordinates: SpriteCoordinates
 
-  private var spriteWidth = 16.0
-  private var spriteHeight = 16.0
-  private var spriteSheetWidth = 256.0
-  private var spriteSheetHeight = 256.0
+  protected var spriteWidth = 16.0
+  protected var spriteHeight = 16.0
 
   init {
     height = 1f
@@ -50,12 +52,6 @@ abstract class CustomParticle(
     val currentPhase = (progress * animPhases).toInt()
 
     if(currentPhase < animPhases) {
-      val spriteCoordinates = getSpriteCoordinates()
-      val minU: Double = spriteCoordinates["minU"]!!
-      val maxU: Double = spriteCoordinates["maxU"]!!
-      val minV: Double = spriteCoordinates["minV"]!!
-      val maxV: Double = spriteCoordinates["maxV"]!!
-
       textureManager.bindTexture(spriteSheet)
 
       val halfSize = 0.5f * size
@@ -93,25 +89,25 @@ abstract class CustomParticle(
       // the buffer.pos needs to be called 4 times
       // The .tex seems to be the texture x and y in the texture image.
       buffer.pos(weirdX1, weirdY1, weirdZ1)
-          .tex(maxU, maxV)
+          .tex(spriteCoordinates.right, spriteCoordinates.bottom)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0F, 1.0F, 0.0F)
           .endVertex()
       buffer.pos(weirdX2, weirdY2, weirdZ2)
-          .tex(maxU, minV)
+          .tex(spriteCoordinates.right, spriteCoordinates.top)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       buffer.pos(weirdX3, weirdY3, weirdZ3)
-          .tex(minU, minV)
+          .tex(spriteCoordinates.left, spriteCoordinates.top)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       buffer.pos(weirdX4, weirdY4, weirdZ4)
-          .tex(minU, maxV)
+          .tex(spriteCoordinates.left, spriteCoordinates.bottom)
           .color(particleRed, particleGreen, particleBlue, particleAlpha)
           .lightmap(0, 240)
           .normal(0.0f, 1.0f, 0.0f)
@@ -133,18 +129,4 @@ abstract class CustomParticle(
   }
 
   override fun getFXLayer(): Int = 3
-
-  private fun getSpriteCoordinates(): HashMap<String, Double> {
-    val coordinates = HashMap<String, Double>()
-
-    val row = textureId / spriteHeight.toInt()
-    val col = textureId - row * spriteWidth.toInt()
-
-    coordinates["minU"] = col * spriteWidth / spriteSheetWidth
-    coordinates["maxU"] = coordinates["minU"]!! + ( spriteWidth / spriteSheetWidth)
-    coordinates["minV"] = row * spriteHeight / spriteSheetHeight
-    coordinates["maxV"] = coordinates["minV"]!! + ( spriteHeight / spriteSheetHeight )
-
-    return coordinates
-  }
 }

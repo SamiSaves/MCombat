@@ -1,9 +1,8 @@
 package fi.majavapaja.mcombat.client.particle
 
 import fi.majavapaja.mcombat.common.combat.DamageType
-import net.minecraft.client.renderer.BufferBuilder
+import fi.majavapaja.mcombat.common.util.SpriteCoordinates
 import net.minecraft.client.renderer.texture.TextureManager
-import net.minecraft.entity.Entity
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
@@ -23,6 +22,7 @@ class AttackParticle(
   override var size = .25f
   override var animPhases = 16
   override var textureId = DamageType.getParticleId((damageType))
+  override var spriteCoordinates = SpriteCoordinates(textureId, spriteSheetWidth, spriteSheetHeight, spriteWidth, spriteHeight)
 
   init {
     setRandomDirection()
