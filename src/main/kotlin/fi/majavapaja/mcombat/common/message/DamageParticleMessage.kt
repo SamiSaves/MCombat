@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.message
 
 import fi.majavapaja.mcombat.client.particle.AttackParticle
+import fi.majavapaja.mcombat.client.particle.DamageParticle
 import fi.majavapaja.mcombat.common.combat.DamageType
 import io.netty.buffer.ByteBuf
 import io.netty.util.CharsetUtil
@@ -84,6 +85,10 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
         minecraft.effectRenderer.addEffect(effect)
       }
     }
+
+    val minecraft = Minecraft.getMinecraft()
+    val effect = DamageParticle(world, message.x, message.y + 1.5, message.z, minecraft.textureManager, message.amount)
+    minecraft.effectRenderer.addEffect(effect)
   }
 }
 
