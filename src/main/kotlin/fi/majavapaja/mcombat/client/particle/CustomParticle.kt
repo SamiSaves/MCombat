@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
+import org.lwjgl.opengl.GL11
 
 @SideOnly(Side.CLIENT)
 abstract class CustomParticle(
@@ -52,7 +53,7 @@ abstract class CustomParticle(
     val currentPhase = (progress * animPhases).toInt()
 
     if(currentPhase < animPhases) {
-      textureManager.bindTexture(spriteSheet)
+      bindTexture()
 
       val halfSize = 0.5f * size
       val weirdX = (prevPosX + (posX - prevPosX) * partialTicks - interpPosX).toFloat()
@@ -85,7 +86,7 @@ abstract class CustomParticle(
       GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
       GlStateManager.disableLighting()
       RenderHelper.disableStandardItemLighting()
-      buffer.begin(7, vertexFormat)
+      buffer.begin(GL11.GL_QUADS, vertexFormat)
       // the buffer.pos needs to be called 4 times
       // The .tex seems to be the texture x and y in the texture image.
       buffer.pos(weirdX1, weirdY1, weirdZ1)
@@ -115,6 +116,10 @@ abstract class CustomParticle(
       Tessellator.getInstance().draw()
       GlStateManager.enableLighting()
     }
+  }
+
+  open fun bindTexture() {
+    textureManager.bindTexture(spriteSheet)
   }
 
   override fun onUpdate() {
