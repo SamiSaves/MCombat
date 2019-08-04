@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import net.minecraftforge.fml.common.registry.EntityRegistry
 
-class FireZombie(world: World): EntityZombie(world), IMob {
+class FireZombie(world: World): EntityZombie(world), ICustomMob {
   companion object {
     fun register(name: String, id: Int) {
       EntityRegistry.registerModEntity(
