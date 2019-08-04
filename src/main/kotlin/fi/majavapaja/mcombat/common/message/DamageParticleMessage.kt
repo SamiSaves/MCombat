@@ -71,10 +71,17 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
   }
 
   private fun processMessage(message: ParticleMessage, world: World) {
-    message.damageTypes.forEach {
-      if (DamageType.getParticleId(it) < 0) return@forEach
+    val damageParticles = message.damageTypes.filter { DamageType.getParticleId(it) >= 0 }
 
-      for (i in 1..10) {
+    damageParticles.forEach {
+      val maxParticles = when {
+        damageParticles.size == 1 -> 7
+        damageParticles.size == 2 -> 5
+        else -> 3
+      }
+
+      val particleAmount = Random.nextInt(2, maxParticles)
+      for (i in 1..particleAmount) {
         val x = message.x
         val y = message.y + 1.5 - Random.nextDouble(-.5, .5)
         val z = message.z
