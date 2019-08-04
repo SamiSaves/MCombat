@@ -26,7 +26,7 @@ class FireZombie(world: World): EntityZombie(world), ICustomMob {
   }
 
   override val damage = hashMapOf(DamageType.Normal to 2f, DamageType.Fire to 4f)
-  override val armor = hashMapOf(DamageType.Normal to 2f, DamageType.Fire to 12f)
+  override val armor = hashMapOf(DamageType.Normal to 20f, DamageType.Fire to 120f, DamageType.Water to -120f)
 
   init {
     isImmuneToFire = true

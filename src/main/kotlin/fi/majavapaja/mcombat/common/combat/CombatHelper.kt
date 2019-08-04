@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterArmor
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
@@ -18,6 +19,7 @@ object CombatHelper {
       currentArmor: HashMap<DamageType, Float> = HashMap()
   ): HashMap<DamageType, Float> =
       when {
+        entity is ICustomMob -> mergeHashMap(currentArmor, entity.armor)
         isMinecraftMonster(entity) -> mergeHashMap(currentArmor, getMonsterArmor(entity))
         else -> currentArmor
       }
