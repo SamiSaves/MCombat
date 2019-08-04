@@ -71,6 +71,7 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
   }
 
   private fun processMessage(message: ParticleMessage, world: World) {
+    val minecraft = Minecraft.getMinecraft()
     val damageParticles = message.damageTypes.filter { DamageType.getParticleId(it) >= 0 }
 
     damageParticles.forEach {
@@ -83,17 +84,14 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
       val particleAmount = Random.nextInt(2, maxParticles)
       for (i in 1..particleAmount) {
         val x = message.x
-        val y = message.y + 1.5 - Random.nextDouble(-.5, .5)
+        val y = message.y + 1.5
         val z = message.z
 
-        val minecraft = Minecraft.getMinecraft()
         val effect = AttackParticle(world, x, y, z, minecraft.textureManager, it)
-
         minecraft.effectRenderer.addEffect(effect)
       }
     }
 
-    val minecraft = Minecraft.getMinecraft()
     val effect = DamageParticle(world, message.x, message.y + 1.5, message.z, minecraft.textureManager, message.amount)
     minecraft.effectRenderer.addEffect(effect)
   }

@@ -25,10 +25,8 @@ class AttackParticle(
   override var spriteCoordinates = SpriteCoordinates(textureId, spriteSheetWidth, spriteSheetHeight, spriteWidth, spriteHeight)
 
   init {
-    setRandomDirection()
-    this.motionY = .16
-
-    size -= Random.nextDouble(0.1).toFloat()
+    setRandomMotion()
+    size -= Random.nextDouble(0.15).toFloat()
   }
 
   override fun onUpdate() {
@@ -44,9 +42,10 @@ class AttackParticle(
     motionZ = slowMotionDown(motionZ)
   }
 
-  private fun setRandomDirection() {
-    motionX = arrayOf(.1, -.1, .0).random()
-    motionZ = arrayOf(.1, -.1, .0).random()
+  private fun setRandomMotion() {
+    motionX = Random.nextDouble(-.15, .15)
+    motionZ = Random.nextDouble(-.15,.15)
+    motionY = Random.nextDouble(0.12, 0.2)
   }
 
   private fun slowMotionDown(motion: Double): Double =
