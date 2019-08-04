@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.client.render.mob.FireZombieRender
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.block.BaseBlock
 import fi.majavapaja.mcombat.common.block.MajavaBlock
@@ -7,6 +8,7 @@ import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
+import fi.majavapaja.mcombat.common.entity.FireZombie
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.common.message.ParticleMessage
@@ -19,6 +21,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.RegistryEvent
+import net.minecraftforge.fml.client.registry.IRenderFactory
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
@@ -87,6 +90,7 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
   override fun preInit(ev: FMLPreInitializationEvent) {
     super.preInit(ev)
     RenderingRegistry.registerEntityRenderingHandler(DebugArrowEntity::class.java, DebugArrowRenderer.factory)
+    RenderingRegistry.registerEntityRenderingHandler(FireZombie::class.java) { FireZombieRender(it) }
   }
 
   @SubscribeEvent
