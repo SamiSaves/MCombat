@@ -2,6 +2,7 @@ package fi.majavapaja.mcombat.common.combat
 
 import fi.majavapaja.mcombat.CommonProxy
 import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
+import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
@@ -12,7 +13,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
 import net.minecraft.util.DamageSource
-import net.minecraft.util.EnumParticleTypes
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 
@@ -69,12 +69,10 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
         else -> hashMapOf(DamageType.Normal to 2f)
       }
     } else {
-      if (isMinecraftMonster(trueSource)) {
-        println("This is a minecraft monster ${trueSource.name}")
-        getMonsterDamage(trueSource)
-      } else {
-        println("This is not a minecraft monster ${trueSource.name}")
-        hashMapOf(DamageType.Normal to 2f)
+      when {
+        trueSource is ICustomMob -> trueSource.damage
+        isMinecraftMonster(trueSource) -> getMonsterDamage(trueSource)
+        else -> hashMapOf(DamageType.Normal to 2f)
       }
     }
   } else {
