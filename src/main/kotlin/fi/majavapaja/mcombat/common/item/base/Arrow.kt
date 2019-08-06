@@ -3,6 +3,7 @@ package fi.majavapaja.mcombat.common.item.base
 import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
 import net.minecraft.item.ItemArrow
@@ -25,5 +26,9 @@ class Arrow(
 
   override fun createArrow(worldIn: World, stack: ItemStack, shooter: EntityLivingBase): EntityArrow {
     return DebugArrowEntity(worldIn, shooter)
+  }
+
+  override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
+    tooltip.addAll(getDamageTooltip())
   }
 }
