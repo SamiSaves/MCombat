@@ -11,17 +11,29 @@ interface IWeapon {
     val tooltip = mutableListOf<String>()
 
     var totalDamage = 0f
-    damage.forEach {
-
-      tooltip.add("  ${it.value.toInt()} ${it.key}")
-      totalDamage += it.value
+    if (damage.size > 1) {
+      damage.forEach {
+        tooltip.add("  ${it.value.toInt()} ${it.key}")
+        totalDamage += it.value
+      }
+    } else {
+      totalDamage = damage.values.first()
     }
 
     val prefix = when {
       totalDamage > 0 -> "+"
       else -> ""
     }
-    tooltip.add(0, "${TextFormatting.RED}$prefix${totalDamage.toInt()} ${I18n.format("damage")}")
+
+    val damageString = "${TextFormatting.RED}$prefix${totalDamage.toInt()}"
+
+    val damageTooltip = if (damage.size == 1) {
+      "$damageString ${damage.keys.first()} ${I18n.format("damage")}"
+    } else {
+      "$damageString ${I18n.format("damage")}"
+    }
+
+    tooltip.add(0, damageTooltip)
 
     return tooltip
   }
