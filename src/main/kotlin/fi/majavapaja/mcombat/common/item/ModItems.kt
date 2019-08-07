@@ -2,6 +2,7 @@ package fi.majavapaja.mcombat.common.item
 
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.item.base.*
+import fi.majavapaja.mcombat.common.item.minecraft.getAsArmor
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.item.base.Item as ItemBase
 import net.minecraft.inventory.EntityEquipmentSlot
@@ -54,10 +55,21 @@ object ModItems {
     if (weapon is IWeapon) {
       // Remove everything after an empty line (should remove the "When in hand" section)
       val indexOfEmptyLine = event.toolTip.indexOf("")
-      if (indexOfEmptyLine > 1) event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
+      if (indexOfEmptyLine > 0) event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
 
       if (event.toolTip.size > 1) event.toolTip.add("")
       event.toolTip.addAll(weapon.getDamageTooltip())
+    }
+
+    val armor = getAsArmor(event.itemStack.item)
+
+    if (armor is IArmor) {
+      // Remove everything after an empty line (should remove the "When in slot" section)
+      val indexOfEmptyLine = event.toolTip.indexOf("")
+      if (indexOfEmptyLine > 0) event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
+
+      if (event.toolTip.size > 1) event.toolTip.add("")
+      event.toolTip.addAll(armor.getTooltip())
     }
   }
 }
