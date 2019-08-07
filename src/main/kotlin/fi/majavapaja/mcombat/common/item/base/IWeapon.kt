@@ -10,13 +10,18 @@ interface IWeapon {
   fun getDamageTooltip(): List<String> {
     val tooltip = mutableListOf<String>()
 
+    var totalDamage = 0f
     damage.forEach {
-      val prefix = when {
-        it.value < 0 -> "-"
-        else -> "+"
-      }
-      tooltip.add("${TextFormatting.AQUA}$prefix${it.value.toInt()} ${it.key} ${I18n.format("damage")}")
+
+      tooltip.add("  ${it.value.toInt()} ${it.key}")
+      totalDamage += it.value
     }
+
+    val prefix = when {
+      totalDamage > 0 -> "+"
+      else -> ""
+    }
+    tooltip.add(0, "${TextFormatting.RED}$prefix${totalDamage.toInt()} ${I18n.format("damage")}")
 
     return tooltip
   }
