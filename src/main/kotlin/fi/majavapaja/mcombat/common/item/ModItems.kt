@@ -13,7 +13,7 @@ import net.minecraftforge.registries.IForgeRegistry
 
 object ModItems {
   val majavapaja = ItemBase("majavapaja")
-  val debugSword = Sword("debug_sword", Item.ToolMaterial.WOOD, hashMapOf(DamageType.Air to 10f))
+  val debugSword = Sword("debug_sword", Item.ToolMaterial.WOOD, hashMapOf(DamageType.Fire to 10f, DamageType.Normal to 5f))
   val debugChestplate = Armor("debug_chestplate", Armor.debugMaterial, EntityEquipmentSlot.CHEST, hashMapOf(DamageType.Earth to 2f))
   val debugLeggings = Armor("debug_leggings", Armor.debugMaterial, EntityEquipmentSlot.LEGS, hashMapOf(DamageType.Earth to 2f))
   val debugBoots = Armor("debug_boots", Armor.debugMaterial, EntityEquipmentSlot.FEET, hashMapOf(DamageType.Earth to 2f))
@@ -46,29 +46,25 @@ object ModItems {
     debugArrow.registerItemModel()
   }
 
-  fun isMinecraftItem(item: Item): Boolean = item.registryName.toString().startsWith("minecraft:")
-
   @SubscribeEvent
   fun setTooltip(event: ItemTooltipEvent) {
-    val weapon = getAsWeapon(event.itemStack.item)
-
-    if (weapon is IWeapon) {
+    val cleanTooltip = {
       // Remove everything after an empty line (should remove the "When in hand" section)
       val indexOfEmptyLine = event.toolTip.indexOf("")
       if (indexOfEmptyLine > 0) event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
 
       if (event.toolTip.size > 1) event.toolTip.add("")
-      event.toolTip.addAll(weapon.getDamageTooltip())
+    }
+
+    val weapon = getAsWeapon(event.itemStack.item)
+    if (weapon is IWeapon) {
+      cleanTooltip()
+      event.toolTip.addAll(weapon.getTooltip())
     }
 
     val armor = getAsArmor(event.itemStack.item)
-
     if (armor is IArmor) {
-      // Remove everything after an empty line (should remove the "When in slot" section)
-      val indexOfEmptyLine = event.toolTip.indexOf("")
-      if (indexOfEmptyLine > 0) event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
-
-      if (event.toolTip.size > 1) event.toolTip.add("")
+      cleanTooltip()
       event.toolTip.addAll(armor.getTooltip())
     }
   }

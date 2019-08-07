@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting
 interface IWeapon {
   val damage: HashMap<DamageType, Float>
 
-  fun getDamageTooltip(): List<String> {
+  fun getTooltip(): List<String> {
     val tooltip = mutableListOf<String>()
 
     var totalDamage = 0f
