@@ -5,9 +5,8 @@ import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
 import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
-import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
 import fi.majavapaja.mcombat.common.item.base.IWeapon
-import fi.majavapaja.mcombat.common.item.minecraft.getToolDamage
+import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
@@ -61,13 +60,8 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
     val mainHandItem = trueSource.heldItemMainhand
 
     if (!mainHandItem.isEmpty) {
-      val weapon = mainHandItem.item
-
-      when {
-        isMinecraftItem(weapon) -> getToolDamage(weapon)
-        weapon is IWeapon -> weapon.damage
-        else -> hashMapOf(DamageType.Normal to 2f)
-      }
+      val weapon = getAsWeapon(mainHandItem.item)
+      weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
     } else {
       when {
         trueSource is ICustomMob -> trueSource.damage
