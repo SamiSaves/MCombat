@@ -17,6 +17,7 @@ fun getAsWeapon(item: Item): IWeapon? {
   val material = when (item) {
     is ItemSword -> item.toolMaterialName
     is ItemTool -> item.toolMaterialName
+    is ItemHoe -> item.materialName
     else -> return null
   }
 
