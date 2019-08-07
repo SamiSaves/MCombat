@@ -52,11 +52,11 @@ object ModItems {
     val weapon = getAsWeapon(event.itemStack.item)
 
     if (weapon is IWeapon) {
-      // Remove everything after an empty line (should remove the "When in hand" part)
+      // Remove everything after an empty line (should remove the "When in hand" section)
       val indexOfEmptyLine = event.toolTip.indexOf("")
       event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
 
-      event.toolTip.add("")
+      if (event.toolTip.size > 1) event.toolTip.add("")
       event.toolTip.addAll(weapon.getDamageTooltip())
     }
   }
