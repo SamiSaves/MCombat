@@ -1,13 +1,13 @@
 package fi.majavapaja.mcombat.common.item
 
 import fi.majavapaja.mcombat.common.combat.DamageType
-import fi.majavapaja.mcombat.common.item.base.Armor
-import fi.majavapaja.mcombat.common.item.base.Arrow
-import fi.majavapaja.mcombat.common.item.base.Bow
-import fi.majavapaja.mcombat.common.item.base.Sword
+import fi.majavapaja.mcombat.common.item.base.*
+import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.item.base.Item as ItemBase
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.Item
+import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.registries.IForgeRegistry
 
 object ModItems {
@@ -46,4 +46,18 @@ object ModItems {
   }
 
   fun isMinecraftItem(item: Item): Boolean = item.registryName.toString().startsWith("minecraft:")
+
+  @SubscribeEvent
+  fun setTooltip(event: ItemTooltipEvent) {
+    val weapon = getAsWeapon(event.itemStack.item)
+
+    if (weapon is IWeapon) {
+      // Remove everything after an empty line (should remove the "When in hand" part)
+      val indexOfEmptyLine = event.toolTip.indexOf("")
+      event.toolTip.removeAll { event.toolTip.indexOf(it) >= indexOfEmptyLine }
+
+      event.toolTip.add("")
+      event.toolTip.addAll(weapon.getDamageTooltip())
+    }
+  }
 }

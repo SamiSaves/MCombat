@@ -91,6 +91,8 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
     super.preInit(ev)
     RenderingRegistry.registerEntityRenderingHandler(DebugArrowEntity::class.java, DebugArrowRenderer.factory)
     RenderingRegistry.registerEntityRenderingHandler(FireZombie::class.java) { FireZombieRender(it) }
+
+    MinecraftForge.EVENT_BUS.register(ModItems)
   }
 
   @SubscribeEvent

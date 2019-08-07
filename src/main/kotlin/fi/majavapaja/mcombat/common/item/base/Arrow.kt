@@ -27,8 +27,4 @@ class Arrow(
   override fun createArrow(worldIn: World, stack: ItemStack, shooter: EntityLivingBase): EntityArrow {
     return DebugArrowEntity(worldIn, shooter)
   }
-
-  override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-    tooltip.addAll(getDamageTooltip())
-  }
 }

@@ -20,8 +20,4 @@ class Bow(
   fun registerItemModel() {
     Main.proxy.registerItemRenderer(this, 0 , name)
   }
-
-  override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-    tooltip.addAll(getDamageTooltip())
-  }
 }
