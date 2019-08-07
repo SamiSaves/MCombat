@@ -17,8 +17,8 @@ class Armor(
     private val name: String,
     armorMaterial: ArmorMaterial,
     equipmentSlot: EntityEquipmentSlot,
-    val armorPoints: HashMap<DamageType, Float>
-): ItemArmor(armorMaterial, 0, equipmentSlot) {
+    override var armor: HashMap<DamageType, Float>
+): ItemArmor(armorMaterial, 0, equipmentSlot), IArmor {
   companion object {
     val debugMaterial = EnumHelper.addArmorMaterial(
         "DEBUG",
@@ -42,12 +42,6 @@ class Armor(
   }
 
   override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-    armorPoints.forEach {
-      val prefix = when {
-        it.value > 0 -> "+"
-        else -> ""
-      }
-      tooltip.add("${TextFormatting.DARK_GREEN}$prefix${it.value.toInt()} ${it.key} ${I18n.format("armor")}")
-    }
+    tooltip.addAll(getTooltip())
   }
 }
