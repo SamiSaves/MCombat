@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.item.minecraft
 
 import fi.majavapaja.mcombat.common.combat.DamageType
+import fi.majavapaja.mcombat.common.item.base.IArmor
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.*
 import net.minecraft.item.ItemArmor.ArmorMaterial
@@ -20,11 +21,16 @@ private val slotModifiers = hashMapOf(
     EntityEquipmentSlot.HEAD  to 0.2f
 )
 
-fun getMinecraftArmorPoints (armor: ItemArmor): HashMap<DamageType, Float> {
-  val armorValue = armorValues[armor.armorMaterial] ?: 0f
-  val slotModifier = slotModifiers[armor.equipmentSlot] ?: 0f
+class MinecraftArmor(armorAmount: Float): IArmor {
+  override var armor = hashMapOf(DamageType.Normal to armorAmount)
+}
 
-  return hashMapOf(
-      DamageType.Normal to (armorValue * slotModifier)
-  )
+fun getAsArmor (item: Item): IArmor? {
+  if (item is IArmor) return item
+  if (item !is ItemArmor) return null
+
+  val armorValue = armorValues[item.armorMaterial] ?: 0f
+  val slotModifier = slotModifiers[item.equipmentSlot] ?: 0f
+
+  return MinecraftArmor(armorValue * slotModifier)
 }

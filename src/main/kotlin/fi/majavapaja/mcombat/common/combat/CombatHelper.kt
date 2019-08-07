@@ -3,10 +3,8 @@ package fi.majavapaja.mcombat.common.combat
 import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterArmor
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
-import fi.majavapaja.mcombat.common.item.ModItems.isMinecraftItem
-import fi.majavapaja.mcombat.common.item.minecraft.getMinecraftArmorPoints
+import fi.majavapaja.mcombat.common.item.minecraft.getAsArmor
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.item.ItemArmor
 
 object CombatHelper {
   fun getArmorPoints (entity: EntityLivingBase): HashMap<DamageType, Float> {
@@ -32,20 +30,14 @@ object CombatHelper {
     newTotalArmor.putAll(currentArmor)
 
     entity.armorInventoryList.forEach {
-      if (it.isEmpty || it.item !is ItemArmor) return@forEach
+      if (it.isEmpty) return@forEach
+      val armor = getAsArmor(it.item) ?: return@forEach
 
-      val armorPiecePoints = getArmorPiecePoints(it.item as ItemArmor)
-      newTotalArmor = mergeHashMap(armorPiecePoints, newTotalArmor)
+      newTotalArmor = mergeHashMap(armor.armor, newTotalArmor)
     }
 
     return newTotalArmor
   }
-
-  private fun getArmorPiecePoints(armor: ItemArmor) =
-      when {
-        isMinecraftItem(armor) -> getMinecraftArmorPoints(armor)
-        else -> hashMapOf(DamageType.Normal to 0f)
-      }
 
   private fun mergeHashMap (map1: HashMap<DamageType, Float>, map2: HashMap<DamageType, Float>): HashMap<DamageType, Float> {
     val newMap = HashMap<DamageType, Float>()
