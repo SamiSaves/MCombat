@@ -14,6 +14,7 @@ tile.majava_block.name=Block of Majava
 entity.mcombat:fire_zombie.name=Fire Zombie
 
 damage=Damage
+armor=Armor
 damageType.normal=Normal
 damageType.magic=Magic
 damageType.fire=Fire
