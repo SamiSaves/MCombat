@@ -12,3 +12,13 @@ enchantment.holy_damage=Holy Damage
 enchantment.rotten_resistance=Rotten Resistance
 tile.majava_block.name=Block of Majava
 entity.mcombat:fire_zombie.name=Fire Zombie
+
+damage=Damage
+damageType.normal=Normal
+damageType.magic=Magic
+damageType.fire=Fire
+damageType.ice=Ice
+damageType.water=Water
+damageType.lightning=Lightning
+damageType.earth=Earth
+damageType.air=Air

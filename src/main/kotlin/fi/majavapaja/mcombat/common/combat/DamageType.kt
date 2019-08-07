@@ -1,6 +1,6 @@
 package fi.majavapaja.mcombat.common.combat
 
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.client.resources.I18n
 
 enum class DamageType(val type: String) {
   Normal("normal"),
@@ -12,7 +12,19 @@ enum class DamageType(val type: String) {
   Earth("earth"),
   Air("air");
 
-  companion object {
+  override fun toString(): String =
+    when (this) {
+      Magic -> I18n.format("damageType.magic")
+      Fire -> I18n.format("damageType.fire")
+      Ice -> I18n.format("damageType.ice")
+      Water -> I18n.format("damageType.water")
+      Lightning -> I18n.format("damageType.lightning")
+      Earth -> I18n.format("damageType.earth")
+      Air -> I18n.format("damageType.air")
+      else -> I18n.format("damageType.normal")
+    }
+
+    companion object {
     fun getDamageType(type: String): DamageType =
       when (type) {
         Magic.type -> Magic

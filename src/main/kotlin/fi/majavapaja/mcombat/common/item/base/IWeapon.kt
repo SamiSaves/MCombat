@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.common.combat.DamageType
+import net.minecraft.client.resources.I18n
 import net.minecraft.util.text.TextFormatting
 
 interface IWeapon {
@@ -14,7 +15,7 @@ interface IWeapon {
         it.value < 0 -> "-"
         else -> "+"
       }
-      tooltip.add("${TextFormatting.AQUA}$prefix${it.value.toInt()} ${it.key.type} damage")
+      tooltip.add("${TextFormatting.AQUA}$prefix${it.value.toInt()} ${it.key} ${I18n.format("damage")}")
     }
 
     return tooltip
