@@ -3,9 +3,9 @@ package fi.majavapaja.mcombat.common.combat
 import fi.majavapaja.mcombat.CommonProxy
 import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
 import fi.majavapaja.mcombat.common.entity.ICustomMob
+import fi.majavapaja.mcombat.common.entity.IWeaponArrow
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
-import fi.majavapaja.mcombat.common.item.base.IWeapon
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
@@ -52,10 +52,9 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
 private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
   if (immediateSource is EntityArrow) {
     when (immediateSource) {
-      is IWeapon -> immediateSource.damage
-      else -> hashMapOf(DamageType.Normal to 4f)
+      is IWeaponArrow -> immediateSource.customDamage
+      else -> hashMapOf(DamageType.Normal to 2f)
     }
-    // TODO: Get bow Damage
   } else if (trueSource is EntityLivingBase) {
     val mainHandItem = trueSource.heldItemMainhand
 

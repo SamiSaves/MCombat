@@ -39,7 +39,7 @@ object CombatHelper {
     return newTotalArmor
   }
 
-  private fun mergeHashMap (map1: HashMap<DamageType, Float>, map2: HashMap<DamageType, Float>): HashMap<DamageType, Float> {
+  fun mergeHashMap (map1: HashMap<DamageType, Float>, map2: HashMap<DamageType, Float>): HashMap<DamageType, Float> {
     val newMap = HashMap<DamageType, Float>()
     newMap.putAll(map1)
 

@@ -19,8 +19,8 @@ object ModItems {
   val debugBoots = Armor("debug_boots", Armor.debugMaterial, EntityEquipmentSlot.FEET, hashMapOf(DamageType.Earth to 2f))
   val debugHelmet = Armor("debug_helmet", Armor.debugMaterial, EntityEquipmentSlot.HEAD, hashMapOf(DamageType.Earth to 2f))
 
-  val debugBow = Bow("debug_bow", hashMapOf(DamageType.Air to 4f))
-  val debugArrow = Arrow("debug_arrow", hashMapOf(DamageType.Air to 1f))
+  val debugBow = Bow("debug_bow", hashMapOf(DamageType.Magic to 4f))
+  val debugArrow = Arrow("debug_arrow", hashMapOf(DamageType.Air to 2f))
 
   fun register(registry: IForgeRegistry<Item>) {
     registry.registerAll(
