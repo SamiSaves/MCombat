@@ -6,6 +6,7 @@ import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.IWeaponArrow
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
+import fi.majavapaja.mcombat.common.item.base.Bow
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
@@ -34,7 +35,6 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   val damage = getDamage(event.source.trueSource, event.source.immediateSource)
   val armorPoints = getArmorPoints(entity)
   var damageAmount = 0f
-
 
   for ((damageType, amount) in damage) {
     damageAmount += amount - ((armorPoints[damageType] ?: 0f) / 10)
@@ -65,8 +65,10 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
     val mainHandItem = trueSource.heldItemMainhand
 
     if (!mainHandItem.isEmpty) {
-      val weapon = getAsWeapon(mainHandItem.item)
-      weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
+      when (val weapon = getAsWeapon(mainHandItem.item)) {
+        is Bow -> hashMapOf(DamageType.Normal to 2f)
+        else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
+      }
     } else {
       when {
         trueSource is ICustomMob -> trueSource.damage
