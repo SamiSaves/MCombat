@@ -35,83 +35,80 @@ class Bow(
     Main.proxy.registerItemRenderer(this, 0 , name)
   }
 
-  override fun onPlayerStoppedUsing(stack: ItemStack, worldIn: World, player: EntityLivingBase, timeLeft: Int) {
+  override fun onPlayerStoppedUsing(bow: ItemStack, worldIn: World, player: EntityLivingBase, timeLeft: Int) {
     if (player !is EntityPlayer) return
 
     val ammo = getAmmo(player)
     if (ammo.isEmpty) return
 
-    var charge = this.getMaxItemUseDuration(stack) - timeLeft
-    charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, charge, true)
+    var charge = this.getMaxItemUseDuration(bow) - timeLeft
+    charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(bow, worldIn, player, charge, true)
     if (charge < 0) return
 
     val arrowVelocity = getArrowVelocity(charge)
+    if (arrowVelocity < 0.1f) return
 
-    if (arrowVelocity >= 0.1f) {
-      val itemarrow = ammo.item as ItemArrow
-      val hasInfiniteAmmo = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0
-      val canArrowBeInfinite = itemarrow.isInfinite(ammo, stack, player)
-      val isInfinite = hasInfiniteAmmo && canArrowBeInfinite
+    val itemarrow = ammo.item as ItemArrow
 
-      if (!worldIn.isRemote) {
-        val entityarrow = itemarrow.createArrow(worldIn, ammo, player)
+    val hasInfiniteAmmo = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0
+    val canArrowBeInfinite = itemarrow.isInfinite(ammo, bow, player)
+    val isInfinite = hasInfiniteAmmo && canArrowBeInfinite
 
-        if (entityarrow is IWeaponArrow) {
-          val bowDamage = getAsWeapon(stack.item)?.damage ?: hashMapOf()
-          val arrowDamage = getAsWeapon(ammo.item)?.damage ?: hashMapOf()
+    if (!worldIn.isRemote) {
+      val entityarrow = itemarrow.createArrow(worldIn, ammo, player)
 
-          entityarrow.customDamage = CombatHelper.mergeHashMap(bowDamage, arrowDamage)
-        }
+      if (entityarrow is IWeaponArrow) {
+        val bowDamage = getAsWeapon(bow.item)?.damage ?: hashMapOf()
+        val arrowDamage = getAsWeapon(ammo.item)?.damage ?: hashMapOf()
 
-        entityarrow.shoot(
-            player,
-            player.rotationPitch,
-            player.rotationYaw,
-            0.0f,
-            arrowVelocity * 3.0f,
-            1.0f
-        )
-
-        if (arrowVelocity == 1.0f) {
-          entityarrow.isCritical = true
-        }
-
-        val powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack)
-
-        if (powerLevel > 0) {
-          entityarrow.damage = entityarrow.damage + powerLevel.toDouble() * 0.5 + 0.5
-        }
-
-        val punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack)
-
-        if (punchLevel > 0) {
-          entityarrow.setKnockbackStrength(punchLevel)
-        }
-
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-          entityarrow.setFire(100)
-        }
-
-        stack.damageItem(1, player)
-
-        if (isInfinite || player.isCreative) {
-          entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY
-        }
-
-        worldIn.spawnEntity(entityarrow)
+        entityarrow.customDamage = CombatHelper.mergeHashMap(bowDamage, arrowDamage)
       }
 
-      worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (Item.itemRand.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f)
+      setMinecraftProperties(entityarrow, bow, arrowVelocity)
 
-      if (!isInfinite && !player.isCreative) {
-        ammo.shrink(1)
+      entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f)
 
-        if (ammo.isEmpty) {
-          player.inventory.deleteStack(ammo)
-        }
+      bow.damageItem(1, player)
+
+      if (isInfinite || player.isCreative) {
+        entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY
       }
 
-      player.addStat(StatList.getObjectUseStats(this)!!)
+      worldIn.spawnEntity(entityarrow)
+    }
+
+    worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (Item.itemRand.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f)
+
+    if (!isInfinite && !player.isCreative) {
+      ammo.shrink(1)
+
+      if (ammo.isEmpty) {
+        player.inventory.deleteStack(ammo)
+      }
+    }
+
+    player.addStat(StatList.getObjectUseStats(this)!!)
+  }
+
+  private fun setMinecraftProperties(entityarrow: EntityArrow, bow: ItemStack, arrowVelocity: Float) {
+    if (arrowVelocity == 1.0f) {
+      entityarrow.isCritical = true
+    }
+
+    val powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bow)
+
+    if (powerLevel > 0) {
+      entityarrow.damage = entityarrow.damage + powerLevel.toDouble() * 0.5 + 0.5
+    }
+
+    val punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bow)
+
+    if (punchLevel > 0) {
+      entityarrow.setKnockbackStrength(punchLevel)
+    }
+
+    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bow) > 0) {
+      entityarrow.setFire(100)
     }
   }
 
