@@ -21,6 +21,7 @@ import net.minecraft.stats.StatList
 import net.minecraft.util.EnumHand
 import net.minecraft.util.SoundCategory
 import net.minecraft.world.World
+import kotlin.math.round
 
 class Bow(
     private val name: String,
@@ -42,11 +43,11 @@ class Bow(
     val ammo = getAmmo(player)
     if (ammo.isEmpty) return
 
-    var charge = this.getMaxItemUseDuration(bow) - timeLeft
-    charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(bow, worldIn, player, charge, true)
-    if (charge < 0) return
+    var chargeTime = this.getMaxItemUseDuration(bow) - timeLeft
+    chargeTime = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(bow, worldIn, player, chargeTime, true)
+    if (chargeTime < 0) return
 
-    val arrowVelocity = getArrowVelocity(charge)
+    val arrowVelocity = getArrowVelocity(chargeTime)
     if (arrowVelocity < 0.1f) return
 
     val itemArrow = ammo.item as ItemArrow
@@ -56,26 +57,29 @@ class Bow(
     val isInfinite = hasInfiniteAmmo && canArrowBeInfinite
 
     if (!worldIn.isRemote) {
-      val entityarrow = createArrowEntity(worldIn, itemArrow, player)
+      val entityArrow = createArrowEntity(worldIn, itemArrow, player)
 
-      if (entityarrow is IWeaponArrow) {
+      if (entityArrow is IWeaponArrow) {
         val bowDamage = getAsWeapon(bow.item)?.damage ?: hashMapOf()
         val arrowDamage = getAsWeapon(ammo.item)?.damage ?: hashMapOf()
 
-        entityarrow.customDamage = CombatHelper.mergeHashMap(bowDamage, arrowDamage)
+        val damage = CombatHelper.mergeHashMap(bowDamage, arrowDamage)
+        damage.forEach { damage[it.key] = round(it.value * arrowVelocity) }
+
+        entityArrow.customDamage = damage
       }
 
-      setMinecraftProperties(entityarrow, bow, arrowVelocity)
+      setMinecraftProperties(entityArrow, bow, arrowVelocity)
 
-      entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f)
+      entityArrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f)
 
       bow.damageItem(1, player)
 
       if (isInfinite || player.isCreative) {
-        entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY
+        entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY
       }
 
-      worldIn.spawnEntity(entityarrow)
+      worldIn.spawnEntity(entityArrow)
     }
 
     worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (Item.itemRand.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f)
