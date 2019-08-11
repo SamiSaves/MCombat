@@ -4,6 +4,7 @@ import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.CombatHelper
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.entity.IWeaponArrow
+import fi.majavapaja.mcombat.common.entity.minecraft.createArrowEntity
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EntityLivingBase
@@ -48,14 +49,14 @@ class Bow(
     val arrowVelocity = getArrowVelocity(charge)
     if (arrowVelocity < 0.1f) return
 
-    val itemarrow = ammo.item as ItemArrow
+    val itemArrow = ammo.item as ItemArrow
 
     val hasInfiniteAmmo = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0
-    val canArrowBeInfinite = itemarrow.isInfinite(ammo, bow, player)
+    val canArrowBeInfinite = itemArrow.isInfinite(ammo, bow, player)
     val isInfinite = hasInfiniteAmmo && canArrowBeInfinite
 
     if (!worldIn.isRemote) {
-      val entityarrow = itemarrow.createArrow(worldIn, ammo, player)
+      val entityarrow = createArrowEntity(worldIn, itemArrow, player)
 
       if (entityarrow is IWeaponArrow) {
         val bowDamage = getAsWeapon(bow.item)?.damage ?: hashMapOf()
