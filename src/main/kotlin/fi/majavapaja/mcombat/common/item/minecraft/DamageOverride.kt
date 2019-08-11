@@ -18,7 +18,6 @@ fun getAsWeapon(item: Item): IWeapon? {
     is ItemSword -> item.toolMaterialName
     is ItemTool -> item.toolMaterialName
     is ItemHoe -> item.materialName
-    is ItemBow -> return MinecraftWeapon(4f)
     is ItemArrow -> return MinecraftWeapon(4f)
     else -> return null
   }

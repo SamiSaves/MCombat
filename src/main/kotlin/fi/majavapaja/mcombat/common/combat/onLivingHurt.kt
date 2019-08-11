@@ -11,6 +11,9 @@ import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.projectile.EntityArrow
+import net.minecraft.entity.projectile.EntitySpectralArrow
+import net.minecraft.entity.projectile.EntityTippedArrow
+import net.minecraft.init.Items
 import net.minecraft.util.DamageSource
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
@@ -53,6 +56,9 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
   if (immediateSource is EntityArrow) {
     when (immediateSource) {
       is IWeaponArrow -> immediateSource.customDamage
+      // Damages for minecraft arrows shot with vanilla bow
+      is EntityTippedArrow -> getAsWeapon(Items.ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
+      is EntitySpectralArrow -> getAsWeapon(Items.SPECTRAL_ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
       else -> hashMapOf(DamageType.Normal to 2f)
     }
   } else if (trueSource is EntityLivingBase) {

@@ -26,7 +26,7 @@ class DebugArrowEntity: EntityArrow, IWeaponArrow {
     }
   }
 
-  override var customDamage = hashMapOf<DamageType, Float>()
+  override var customDamage = ModItems.debugArrow.damage
 
   constructor (world: World, shooter: EntityLivingBase): super(world, shooter)
   @Suppress("unused")
