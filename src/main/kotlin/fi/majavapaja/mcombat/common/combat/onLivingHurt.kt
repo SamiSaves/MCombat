@@ -31,6 +31,7 @@ val ignoredDamageSources = listOf(
 
 fun onLivingHurtEvent(event: LivingHurtEvent) {
   if (ignoredDamageSources.contains(event.source)) return
+  if (event.source.isExplosion) return
 
   event.isCanceled = true
 
