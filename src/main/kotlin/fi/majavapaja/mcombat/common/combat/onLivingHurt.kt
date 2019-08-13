@@ -30,12 +30,16 @@ val ignoredDamageSources = listOf(
 )
 
 fun onLivingHurtEvent(event: LivingHurtEvent) {
-  if (ignoredDamageSources.contains(event.source)) return
-  if (event.source.isExplosion) return
+  val entity = event.entity as EntityLivingBase
+
+  if (ignoredDamageSources.contains(event.source) || event.source.isExplosion) {
+    createParticles(entity, hashMapOf(DamageType.Normal to event.amount), event.amount)
+    println("Damage was passed to Minecraft damage system")
+    return
+  }
 
   event.isCanceled = true
 
-  val entity = event.entity as EntityLivingBase
   val damage = getDamage(event.source.trueSource, event.source.immediateSource)
   val armorPoints = getArmorPoints(entity)
   var damageAmount = 0f
