@@ -11,6 +11,9 @@ import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.monster.EntityMob
+import net.minecraft.entity.monster.EntitySkeleton
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityArrow
 import net.minecraft.entity.projectile.EntitySpectralArrow
 import net.minecraft.entity.projectile.EntityTippedArrow
@@ -54,13 +57,7 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
 
 private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
   if (immediateSource is EntityArrow) {
-    when (immediateSource) {
-      is IWeaponArrow -> immediateSource.customDamage
-      // Damages for minecraft arrows shot with vanilla bow
-      is EntityTippedArrow -> getAsWeapon(Items.ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
-      is EntitySpectralArrow -> getAsWeapon(Items.SPECTRAL_ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
-      else -> hashMapOf(DamageType.Normal to 2f)
-    }
+    getArrowDamage(trueSource, immediateSource)
   } else if (trueSource is EntityLivingBase) {
     val mainHandItem = trueSource.heldItemMainhand
 
@@ -70,6 +67,7 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
         else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
       }
     } else {
+
       when {
         trueSource is ICustomMob -> trueSource.damage
         isMinecraftMonster(trueSource) -> getMonsterDamage(trueSource)
@@ -79,6 +77,27 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<Da
   } else {
     hashMapOf(DamageType.Normal to 2f)
   }
+
+private fun getArrowDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> {
+  var damage = when (immediateSource) {
+    is IWeaponArrow -> immediateSource.customDamage
+    is EntityTippedArrow -> getAsWeapon(Items.ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
+    is EntitySpectralArrow -> getAsWeapon(Items.SPECTRAL_ARROW)?.damage ?: hashMapOf(DamageType.Normal to 2f)
+    else -> hashMapOf(DamageType.Normal to 2f)
+  }
+
+  if (trueSource is EntityMob && trueSource !is EntityPlayer) {
+    val bowDamage = getAsWeapon(trueSource.heldItemMainhand.item)?.damage ?: hashMapOf(DamageType.Normal to 0f)
+    damage = CombatHelper.mergeHashMap(damage, bowDamage)
+
+    if (trueSource is EntitySkeleton) {
+      val skeletonDamage = getMonsterDamage(trueSource)
+      damage = CombatHelper.mergeHashMap(damage, skeletonDamage)
+    }
+  }
+
+  return damage
+}
 
 private fun createParticles (entity: EntityLivingBase, damage: HashMap<DamageType, Float>, amount: Float) {
   // Send particles to all nearby players

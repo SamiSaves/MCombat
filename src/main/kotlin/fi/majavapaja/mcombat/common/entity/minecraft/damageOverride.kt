@@ -10,7 +10,8 @@ fun getMonsterDamage (entity: EntityLivingBase): HashMap<DamageType, Float> =
     EntityEnderman::class ->  hashMapOf(DamageType.Normal to 10f)
     EntityEndermite::class -> hashMapOf(DamageType.Normal to 4f)
     EntityPigZombie::class -> hashMapOf(DamageType.Normal to 6f)
-    EntitySkeleton::class -> hashMapOf(DamageType.Earth to 6f)
+    // Skeleton damage is in added to its bow + arrow damange
+    EntitySkeleton::class -> hashMapOf(DamageType.Earth to 2f)
     EntitySlime::class -> hashMapOf(DamageType.Magic to 4f)
     EntitySnowman::class -> hashMapOf(DamageType.Ice to 10f)
     EntitySpider::class -> hashMapOf(DamageType.Normal to 4f)
