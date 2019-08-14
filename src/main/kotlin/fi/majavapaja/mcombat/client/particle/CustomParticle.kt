@@ -31,7 +31,7 @@ abstract class CustomParticle(
     const val spriteSheetHeight = 256.0
   }
 
-  protected val vertexFormat = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
+  private val vertexFormat = VertexFormat().addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B)
 
   protected abstract var life: Int
   protected abstract var lifeTime: Int
@@ -85,6 +85,7 @@ abstract class CustomParticle(
 
       GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
       GlStateManager.disableLighting()
+      if (shouldDisableDepth()) GlStateManager.disableDepth()
       RenderHelper.disableStandardItemLighting()
       buffer.begin(GL11.GL_QUADS, vertexFormat)
       // the buffer.pos needs to be called 4 times
@@ -114,7 +115,8 @@ abstract class CustomParticle(
           .normal(0.0f, 1.0f, 0.0f)
           .endVertex()
       Tessellator.getInstance().draw()
-      GlStateManager.enableLighting()
+      if (shouldDisableDepth()) GlStateManager.enableLighting()
+      GlStateManager.enableDepth()
     }
   }
 

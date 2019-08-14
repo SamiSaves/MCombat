@@ -76,4 +76,6 @@ class DamageParticle(
 
     return BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB)
   }
+
+  override fun shouldDisableDepth() = true
 }
