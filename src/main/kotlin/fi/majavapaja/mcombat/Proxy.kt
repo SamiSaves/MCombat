@@ -4,6 +4,7 @@ import fi.majavapaja.mcombat.client.render.mob.FireZombieRender
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.block.BaseBlock
 import fi.majavapaja.mcombat.common.block.MajavaBlock
+import fi.majavapaja.mcombat.common.block.ModBlocks
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
@@ -41,24 +42,14 @@ open class CommonProxy(val side: Side) {
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
     Damage.initialize()
+    ModBlocks.registerBlocks()
 
-    registerBlock(MajavaBlock())
     particleNetwork.registerMessage(
         ParticleMessageHandler::class.java,
         ParticleMessage::class.java,
         100,
         Side.CLIENT
     )
-  }
-
-  fun registerBlock(block: BaseBlock) {
-    ForgeRegistries.BLOCKS.register(block)
-    val item = ItemBlock(block)
-    item.setRegistryName(block.registryName)
-    ForgeRegistries.ITEMS.register(item)
-
-    val model = ModelResourceLocation("$modId:${block.name}", "inventory")
-    ModelLoader.setCustomModelResourceLocation(item, 0, model)
   }
 
   open fun init(ev: FMLInitializationEvent) {

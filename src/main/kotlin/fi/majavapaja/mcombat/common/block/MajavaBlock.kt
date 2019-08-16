@@ -8,21 +8,6 @@ import net.minecraft.util.BlockRenderLayer
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
-open class BaseBlock(
-  val name: String,
-  creativeTab: CreativeTabs,
-  material: Material,
-  val layer: BlockRenderLayer
-) : Block(material) {
-  init {
-    setUnlocalizedName(name)
-    setCreativeTab(creativeTab)
-    setRegistryName(name)
-  }
-
-  @SideOnly(Side.CLIENT)
-  override fun getBlockLayer(): BlockRenderLayer = layer
-}
 
 class MajavaBlock : BaseBlock(
   name = "majava_block",
