@@ -41,7 +41,7 @@ open class CommonProxy(val side: Side) {
 
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
-    Damage.initialize()
+    MinecraftForge.EVENT_BUS.register(Damage)
     ModBlocks.registerBlocks()
 
     particleNetwork.registerMessage(

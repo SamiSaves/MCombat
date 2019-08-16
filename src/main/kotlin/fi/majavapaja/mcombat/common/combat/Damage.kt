@@ -8,10 +8,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 @Mod.EventBusSubscriber
 object Damage {
-  fun initialize() {
-    MinecraftForge.EVENT_BUS.register(this)
-  }
-
   @SubscribeEvent(priority = EventPriority.LOWEST)
   fun onLivingHurt(event: LivingHurtEvent) = onLivingHurtEvent(event)
 }
