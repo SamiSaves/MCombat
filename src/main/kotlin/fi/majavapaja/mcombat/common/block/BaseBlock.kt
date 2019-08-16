@@ -18,22 +18,26 @@ open class BaseBlock(
     material: Material,
     val layer: BlockRenderLayer
 ) : Block(material) {
+  var item = ItemBlock(this)
+
   init {
     unlocalizedName = name
     setRegistryName(name)
     setCreativeTab(creativeTab)
   }
 
+  fun registerBlock() {
+    ForgeRegistries.BLOCKS.register(this)
+
+    item.registryName = this.registryName
+    ForgeRegistries.ITEMS.register(item)
+  }
+
   @SideOnly(Side.CLIENT)
   override fun getBlockLayer(): BlockRenderLayer = layer
 
-  fun registerBlock() {
-    ForgeRegistries.BLOCKS.register(this)
-    val item = ItemBlock(this)
-    item.registryName = this.registryName
-
-    ForgeRegistries.ITEMS.register(item)
-
+  @SideOnly(Side.CLIENT)
+  fun registerModel () {
     val model = ModelResourceLocation("$modId:${this.name}", "inventory")
     ModelLoader.setCustomModelResourceLocation(item, 0, model)
   }

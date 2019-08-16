@@ -42,6 +42,7 @@ open class CommonProxy(val side: Side) {
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
     MinecraftForge.EVENT_BUS.register(Damage)
+
     ModBlocks.registerBlocks()
 
     particleNetwork.registerMessage(
@@ -84,6 +85,8 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
     RenderingRegistry.registerEntityRenderingHandler(FireZombie::class.java) { FireZombieRender(it) }
 
     MinecraftForge.EVENT_BUS.register(ModItems)
+
+    ModBlocks.registerModels()
   }
 
   @SubscribeEvent
