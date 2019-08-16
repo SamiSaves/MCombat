@@ -91,18 +91,6 @@ class ClientProxy: CommonProxy(Side.CLIENT) {
   fun registerItems(event: ModelRegistryEvent) {
     ModItems.registerModels()
   }
-
-  fun spawnParticle(
-      world: World,
-      x: Double,
-      y: Double,
-      z: Double,
-      xSpeed: Double,
-      ySpeed: Double,
-      zSpeed: Double
-      // ...data: Int
-  ) {
-  }
 }
 
 @SideOnly(Side.SERVER)
