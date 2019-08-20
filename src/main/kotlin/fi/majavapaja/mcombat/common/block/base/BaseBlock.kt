@@ -1,4 +1,4 @@
-package fi.majavapaja.mcombat.common.block
+package fi.majavapaja.mcombat.common.block.base
 
 import fi.majavapaja.mcombat.modId
 import net.minecraft.block.Block
