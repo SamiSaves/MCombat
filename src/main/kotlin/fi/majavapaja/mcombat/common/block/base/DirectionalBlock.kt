@@ -29,7 +29,7 @@ open class DirectionalBlock(
   }
 
   override fun createBlockState(): BlockStateContainer {
-    return BlockStateContainer(this, *arrayOf<IProperty<*>>(BlockHorizontal.FACING))
+    return BlockStateContainer(this, BlockHorizontal.FACING)
   }
 
   override fun withRotation(state: IBlockState, rot: Rotation): IBlockState {
