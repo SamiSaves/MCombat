@@ -1,6 +1,6 @@
 package fi.majavapaja.mcombat.common.block.base
 
-import net.minecraft.block.BlockDirectional
+import net.minecraft.block.BlockHorizontal
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.BlockStateContainer
@@ -21,41 +21,30 @@ open class DirectionalBlock(
     layer: BlockRenderLayer
 ) : BaseBlock(name, creativeTab, material, layer) {
   init {
-    this.defaultState = this.blockState.baseState.withProperty(BlockDirectional.FACING, EnumFacing.SOUTH)
+    this.defaultState = this.blockState.baseState.withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH)
   }
 
   override fun getStateForPlacement(worldIn: World, pos: BlockPos, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase): IBlockState {
-    return this.defaultState.withProperty(BlockDirectional.FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer).opposite)
+    return this.defaultState.withProperty(BlockHorizontal.FACING, placer.horizontalFacing.opposite)
   }
 
   override fun createBlockState(): BlockStateContainer {
-    return BlockStateContainer(this, *arrayOf<IProperty<*>>(BlockDirectional.FACING))
-  }
-
-  override fun onBlockAdded(worldIn: World, pos: BlockPos, state: IBlockState) {
-    if (!worldIn.isRemote)
-      worldIn.setBlockState(pos, state.withProperty(BlockDirectional.FACING, EnumFacing.SOUTH), 2)
+    return BlockStateContainer(this, *arrayOf<IProperty<*>>(BlockHorizontal.FACING))
   }
 
   override fun withRotation(state: IBlockState, rot: Rotation): IBlockState {
-    return state.withProperty(BlockDirectional.FACING, rot.rotate(state.getValue(BlockDirectional.FACING) as EnumFacing))
+    return state.withProperty(BlockHorizontal.FACING, rot.rotate(state.getValue(BlockHorizontal.FACING) as EnumFacing))
   }
 
   override fun withMirror(state: IBlockState, mirrorIn: Mirror): IBlockState {
-    return state.withRotation(mirrorIn.toRotation(state.getValue(BlockDirectional.FACING) as EnumFacing))
+    return state.withRotation(mirrorIn.toRotation(state.getValue(BlockHorizontal.FACING) as EnumFacing))
   }
 
   override fun getStateFromMeta(meta: Int): IBlockState {
-    var enumfacing = EnumFacing.getFront(meta)
-
-    if (enumfacing.axis == EnumFacing.Axis.Y) {
-      enumfacing = EnumFacing.NORTH
-    }
-
-    return this.defaultState.withProperty(BlockDirectional.FACING, enumfacing)
+    return this.defaultState.withProperty(BlockHorizontal.FACING, EnumFacing.getHorizontal(meta))
   }
 
   override fun getMetaFromState(state: IBlockState): Int {
-    return (state.getValue(BlockDirectional.FACING) as EnumFacing).index
+    return (state.getValue(BlockHorizontal.FACING) as EnumFacing).horizontalIndex
   }
 }
