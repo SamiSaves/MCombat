@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "mcombat:notice_board_model" },
+    "facing=south": { "model": "mcombat:notice_board_model", "y": 180 },
+    "facing=west":  { "model": "mcombat:notice_board_model", "y": 270 },
+    "facing=east":  { "model": "mcombat:notice_board_model", "y": 90 }
+  }
+}
