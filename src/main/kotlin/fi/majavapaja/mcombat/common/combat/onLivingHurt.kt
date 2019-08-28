@@ -67,9 +67,9 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): Map<Damage
     val mainHandItem = trueSource.heldItemMainhand
 
     if (!mainHandItem.isEmpty) {
-      val overrides = DamageOverridesCapability.getDamageOverrides(mainHandItem)?.toMap() ?: emptyMap()
+      val overrides = StatOverridesCapability.getStatOverrides(mainHandItem)
       when {
-        !overrides.isEmpty() -> overrides
+        overrides != null && !overrides.damage.isEmpty() -> overrides.damage
         else -> when (val weapon = getAsWeapon(mainHandItem.item)) {
           is Bow -> hashMapOf(DamageType.Normal to 2f)
           else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)

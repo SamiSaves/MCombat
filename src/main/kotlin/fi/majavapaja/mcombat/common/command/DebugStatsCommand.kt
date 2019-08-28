@@ -1,6 +1,6 @@
 package fi.majavapaja.mcombat.common.command
 
-import fi.majavapaja.mcombat.common.combat.DamageOverridesCapability
+import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.command.CommandBase
@@ -29,28 +29,15 @@ class DebugStatsCommand() : CommandBase() {
         throw UserError("Command is only available when holding debug item")
       }
 
+      val override = StatOverridesCapability.getStatOverrides(stack)!!
       if (args.size == 0) {
-        DamageOverridesCapability.getDamageOverrides(stack)?.let {
-          sendMessage(entity, "${it}")
-        }
+        sendMessage(entity, "${override}")
         return
       }
 
       val (type, damage) = parseArgs(args)
-
-      DamageOverridesCapability.getDamageOverrides(stack)?.let {
-        when (type) {
-          DamageType.Fire -> it.fire = damage
-          DamageType.Normal -> it.normal = damage
-          DamageType.Magic -> it.magic = damage
-          DamageType.Ice -> it.ice = damage
-          DamageType.Water -> it.water = damage
-          DamageType.Lightning -> it.lightning = damage
-          DamageType.Earth -> it.earth = damage
-          DamageType.Air -> it.air = damage
-        }
-        sendMessage(entity, "${it}")
-      }
+      override.damage = override.damage + (type to damage)
+      sendMessage(entity, "${override}")
 
     } catch (e: UserError) {
       sendMessage(entity, "${e.message}\nUsage: $usage")
