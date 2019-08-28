@@ -13,8 +13,33 @@ import net.minecraft.util.text.TextComponentString
 import java.lang.Float.parseFloat
 import java.lang.RuntimeException
 
+sealed class Args {
+  object Show : Args()
+  data class SetDamage(val type: DamageType, val damage: Float) : Args()
+
+  companion object {
+    fun parse(args: Array<String>): Args = when {
+      args.size == 0 -> Args.Show
+      args.size == 2 -> {
+        val type = DamageType.getDamageType(args[0])
+        val damage = try {
+          parseFloat(args[1])
+        } catch (e: NumberFormatException) {
+          throw UserError("${args[1]} is not a number")
+        }
+        if (damage < 0) {
+          throw UserError("Damage should be positive (was ${damage})")
+        }
+        Args.SetDamage(type, damage)
+      }
+      else -> throw UserError("Invalid number of arguments")
+    }
+
+  }
+}
+
 class DebugStatsCommand() : CommandBase() {
-  val usage = "/${getName()} <type> <damage>"
+  val usage = "/${getName()} OR /${getName()} <type> <damage>"
 
   override fun getName() = "d"
 
@@ -22,25 +47,33 @@ class DebugStatsCommand() : CommandBase() {
 
   override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
     val entity = sender.commandSenderEntity!!
+    if (!(entity is EntityPlayer)) return
     try {
-      if (!(entity is EntityPlayer)) return
-      val stack = itemInHand(entity)
-      if (!ModItems.isDebugItem(stack)) {
-        throw UserError("Command is only available when holding debug item")
-      }
-
-      val override = StatOverridesCapability.getStatOverrides(stack)!!
-      if (args.size == 0) {
-        sendMessage(entity, "${override}")
-        return
-      }
-
-      val (type, damage) = parseArgs(args)
-      override.damage = override.damage + (type to damage)
-      sendMessage(entity, "${override}")
-
+      runCommand(entity, Args.parse(args))
     } catch (e: UserError) {
-      sendMessage(entity, "${e.message}\nUsage: $usage")
+      sendMessage(sender, "${e.message}\nUsage: $usage")
+    }
+  }
+
+  private fun runCommand(entity: EntityPlayer, args: Args) {
+    val stack = itemInHand(entity)
+    if (!ModItems.isDebugItem(stack)) {
+      throw UserError("Command is only available when holding debug item")
+    }
+
+    val override = StatOverridesCapability.getStatOverrides(stack)!!
+    when (args) {
+      is Args.Show -> {
+        sendMessage(entity, "${override}")
+      }
+
+      is Args.SetDamage -> {
+        override.damage = when (args.damage) {
+          0f -> override.damage - args.type
+          else -> override.damage + (args.type to args.damage)
+        }
+        sendMessage(entity, "${override}")
+      }
     }
   }
 
@@ -51,25 +84,6 @@ class DebugStatsCommand() : CommandBase() {
 
   fun itemInHand(p: EntityPlayer): ItemStack =
     p.getHeldItem(EnumHand.MAIN_HAND)
-
-  fun parseArgs(args: Array<String>): Pair<DamageType, Float> {
-    if (args.size != 2) {
-      throw UserError("Command requires two parameters")
-    }
-
-    val type = DamageType.getDamageType(args[0])
-    val damage = try {
-      parseFloat(args[1])
-    } catch (e: NumberFormatException) {
-      throw UserError("${args[1]} is not a number")
-    }
-
-    if (damage < 0) {
-      throw UserError("Damage should be positive (was ${damage})")
-    }
-
-    return Pair(type, damage)
-  }
 }
 
 class UserError(override val message: String): RuntimeException(message)
