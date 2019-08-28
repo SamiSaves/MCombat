@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat
 
+import fi.majavapaja.mcombat.common.command.DebugStatsCommand
 import fi.majavapaja.mcombat.common.command.FooCommand
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.command.CommandBase
@@ -54,5 +55,6 @@ object Main {
   @Mod.EventHandler
   fun serverStart(event: FMLServerStartingEvent) {
     event.registerServerCommand(FooCommand())
+    event.registerServerCommand(DebugStatsCommand())
   }
 }

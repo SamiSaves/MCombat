@@ -7,6 +7,7 @@ import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.item.base.Item as ItemBase
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.registries.IForgeRegistry
@@ -21,6 +22,16 @@ object ModItems {
 
   val debugBow = Bow("debug_bow", hashMapOf(DamageType.Magic to 4f))
   val debugArrow = Arrow("debug_arrow", hashMapOf(DamageType.Air to 2f))
+
+  private val allDebugItems = arrayOf(
+    debugSword,
+    debugChestplate,
+    debugLeggings,
+    debugBoots,
+    debugHelmet,
+    debugBow,
+    debugArrow
+  )
 
   fun register(registry: IForgeRegistry<Item>) {
     registry.registerAll(
@@ -68,4 +79,7 @@ object ModItems {
       event.toolTip.addAll(armor.getTooltip())
     }
   }
+
+  fun isDebugItem(stack: ItemStack): Boolean =
+    allDebugItems.contains(stack.item)
 }

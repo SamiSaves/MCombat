@@ -4,6 +4,8 @@ import fi.majavapaja.mcombat.client.render.mob.FireZombieRender
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.block.ModBlocks
 import fi.majavapaja.mcombat.common.combat.Damage
+import fi.majavapaja.mcombat.common.combat.DamageOverridesCapability
+import fi.majavapaja.mcombat.common.combat.DamageOverridesEventHandler
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
@@ -35,6 +37,8 @@ open class CommonProxy(val side: Side) {
 
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
+    DamageOverridesCapability.register()
+    MinecraftForge.EVENT_BUS.register(DamageOverridesEventHandler)
     MinecraftForge.EVENT_BUS.register(Damage)
 
     ModBlocks.registerBlocks()

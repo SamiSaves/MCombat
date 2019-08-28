@@ -60,19 +60,22 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   println("Someone was hit with $damage for $damageAmount points of damage. Someone had $armorPoints resistance")
 }
 
-private fun getDamage(trueSource: Entity?, immediateSource: Entity?): HashMap<DamageType, Float> =
+private fun getDamage(trueSource: Entity?, immediateSource: Entity?): Map<DamageType, Float> =
   if (immediateSource is EntityArrow) {
     getArrowDamage(trueSource, immediateSource)
   } else if (trueSource is EntityLivingBase) {
     val mainHandItem = trueSource.heldItemMainhand
 
     if (!mainHandItem.isEmpty) {
-      when (val weapon = getAsWeapon(mainHandItem.item)) {
-        is Bow -> hashMapOf(DamageType.Normal to 2f)
-        else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
+      val overrides = DamageOverridesCapability.getDamageOverrides(mainHandItem)?.toMap() ?: emptyMap()
+      when {
+        !overrides.isEmpty() -> overrides
+        else -> when (val weapon = getAsWeapon(mainHandItem.item)) {
+          is Bow -> hashMapOf(DamageType.Normal to 2f)
+          else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
+        }
       }
     } else {
-
       when {
         trueSource is ICustomMob -> trueSource.damage
         isMinecraftMonster(trueSource) -> getMonsterDamage(trueSource)
@@ -104,7 +107,7 @@ private fun getArrowDamage(trueSource: Entity?, immediateSource: Entity?): HashM
   return damage
 }
 
-private fun createParticles (entity: EntityLivingBase, damage: HashMap<DamageType, Float>, amount: Float) {
+private fun createParticles (entity: EntityLivingBase, damage: Map<DamageType, Float>, amount: Float) {
   // Send particles to all nearby players
   val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
     CommonProxy.particleNetwork.sendToAllAround(ParticleMessage(
