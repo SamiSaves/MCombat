@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "mcombat:majavapaja"
+    },
+    "title": {
+      "translate": "advancement.mcombat.root"
+    },
+    "description": {
+      "translate": "advancement.mcombat.root.desc"
+    },
+    "background": "minecraft:textures/blocks/planks_oak.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "crafting_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mcombat:majavapaja"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -24,3 +24,6 @@ damageType.water=Water
 damageType.lightning=Lightning
 damageType.earth=Earth
 damageType.air=Air
+
+advancement.mcombat.root=Advancement Example
+advancement.mcombat.root.desc=Example of an advancement :o
