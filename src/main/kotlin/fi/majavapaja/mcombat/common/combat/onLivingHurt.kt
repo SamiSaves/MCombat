@@ -110,7 +110,7 @@ private fun getArrowDamage(trueSource: Entity?, immediateSource: Entity?): HashM
 private fun createParticles (entity: EntityLivingBase, damage: Map<DamageType, Float>, amount: Float) {
   // Send particles to all nearby players
   val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
-    CommonProxy.particleNetwork.sendToAllAround(ParticleMessage(
+    CommonProxy.network.sendToAllAround(ParticleMessage(
         entity.posX,
         entity.posY,
         entity.posZ,

@@ -14,6 +14,8 @@ import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.entity.FireZombie
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
+import fi.majavapaja.mcombat.common.message.HuntMessage
+import fi.majavapaja.mcombat.common.message.HuntMessageHandler
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import fi.majavapaja.mcombat.common.message.ParticleMessageHandler
 import net.minecraft.item.Item
@@ -34,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly
 @Suppress("unused")
 open class CommonProxy(val side: Side) {
   companion object {
-    val particleNetwork = NetworkRegistry.INSTANCE.newSimpleChannel(modId)!!
+    val network = NetworkRegistry.INSTANCE.newSimpleChannel(modId)!!
   }
 
   open fun preInit(ev: FMLPreInitializationEvent) {
@@ -46,11 +48,17 @@ open class CommonProxy(val side: Side) {
 
     ModBlocks.registerBlocks()
 
-    particleNetwork.registerMessage(
+    network.registerMessage(
         ParticleMessageHandler::class.java,
         ParticleMessage::class.java,
         100,
         Side.CLIENT
+    )
+    network.registerMessage(
+        HuntMessageHandler::class.java,
+        HuntMessage::class.java,
+        101,
+        Side.SERVER
     )
   }
 
