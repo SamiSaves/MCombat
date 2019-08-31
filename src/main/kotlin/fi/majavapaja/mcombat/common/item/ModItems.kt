@@ -4,6 +4,8 @@ import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.item.base.*
 import fi.majavapaja.mcombat.common.item.minecraft.getAsArmor
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.ICriterionInstance
 import fi.majavapaja.mcombat.common.item.base.Item as ItemBase
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.Item

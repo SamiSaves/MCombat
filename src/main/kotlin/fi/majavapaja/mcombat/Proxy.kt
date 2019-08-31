@@ -2,6 +2,7 @@ package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.client.render.mob.FireZombieRender
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
+import fi.majavapaja.mcombat.common.advancement.ModTriggers
 import fi.majavapaja.mcombat.common.block.ModBlocks
 import fi.majavapaja.mcombat.common.combat.Damage
 import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
@@ -55,6 +56,7 @@ open class CommonProxy(val side: Side) {
     ModEffects.registerEffects()
     ModEntities.registerEntities()
     ModEnchantments.register()
+    ModTriggers.registerTriggers()
   }
   open fun postInit(ev:FMLPostInitializationEvent) { }
   open fun registerItemRenderer(item: Item, meta: Int, id: String) { }

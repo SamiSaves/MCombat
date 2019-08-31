@@ -25,5 +25,5 @@ damageType.lightning=Lightning
 damageType.earth=Earth
 damageType.air=Air
 
-advancement.mcombat.root=Advancement Example
-advancement.mcombat.root.desc=Example of an advancement :o
+advancement.mcombat.root=Let the hunt begin!
+advancement.mcombat.root.desc=Find and interact with a notice board

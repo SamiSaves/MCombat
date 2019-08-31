@@ -10,18 +10,14 @@
       "translate": "advancement.mcombat.root.desc"
     },
     "background": "minecraft:textures/blocks/planks_oak.png",
-    "show_toast": false,
+    "show_toast": true,
     "announce_to_chat": false
   },
   "criteria": {
     "crafting_table": {
-      "trigger": "minecraft:inventory_changed",
+      "trigger": "mcombat:open_notice_board",
       "conditions": {
-        "items": [
-          {
-            "item": "mcombat:majavapaja"
-          }
-        ]
+        "block": "mcombat:notice_board"
       }
     }
   }
