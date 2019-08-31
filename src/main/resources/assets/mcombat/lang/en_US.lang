@@ -1,4 +1,5 @@
-itemGroup.mcombat=MCombat
+itemGroup.mcombat=MCombaadvancement.root.title=MCombat
+advancement.root.description=Let the hunt begin!t
 item.majavapaja.name=Majavapaja
 item.debug_sword.name=Debug Sword
 item.debug_chestplate.name=Debug Chestplate
@@ -25,5 +26,7 @@ damageType.lightning=Lightning
 damageType.earth=Earth
 damageType.air=Air
 
-advancement.mcombat.root=MCombat
-advancement.mcombat.root.desc=Let the hunt begin!
+advancement.root.title=MCombat
+advancement.root.description=Let the hunt begin!
+advancement.hunt.title=The Hunt
+advancement.hunt.description=Find and kill the thing

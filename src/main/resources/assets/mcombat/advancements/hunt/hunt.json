@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "mcombat:debug_sword"
+    },
+    "title": {
+      "translate": "advancement.hunt.title"
+    },
+    "description": {
+      "translate": "advancement.hunt.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "mcombat:root",
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "start_quest": {
+      "trigger": "minecraft:impossible"
+    },
+    "finish_quest": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

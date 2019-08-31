@@ -4,10 +4,10 @@
       "item": "mcombat:majavapaja"
     },
     "title": {
-      "translate": "advancement.mcombat.root"
+      "translate": "advancement.root.title"
     },
     "description": {
-      "translate": "advancement.mcombat.root.desc"
+      "translate": "advancement.root.description"
     },
     "background": "minecraft:textures/blocks/planks_oak.png",
     "show_toast": true,
