@@ -1,7 +1,7 @@
 package fi.majavapaja.mcombat.common.block
 
 import fi.majavapaja.mcombat.Main
-import fi.majavapaja.mcombat.client.render.NoticeBoardGui
+import fi.majavapaja.mcombat.client.render.gui.NoticeBoardGui
 import fi.majavapaja.mcombat.common.block.base.DirectionalBlock
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState

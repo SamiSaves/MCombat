@@ -1,6 +1,5 @@
-package fi.majavapaja.mcombat.client.render
+package fi.majavapaja.mcombat.client.render.gui
 
-import fi.majavapaja.mcombat.client.render.gui.Button
 import fi.majavapaja.mcombat.modId
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
