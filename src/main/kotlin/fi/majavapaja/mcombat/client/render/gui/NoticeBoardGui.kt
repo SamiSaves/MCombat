@@ -57,5 +57,5 @@ class NoticeBoardGui: GuiScreen() {
 
   private fun center (size: Int, textureSize: Int): Int = (size / 2 - textureSize / 2)
 
-  override fun doesGuiPauseGame(): Boolean = true
+  override fun doesGuiPauseGame(): Boolean = false
 }
