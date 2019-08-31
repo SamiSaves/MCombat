@@ -25,5 +25,5 @@ damageType.lightning=Lightning
 damageType.earth=Earth
 damageType.air=Air
 
-advancement.mcombat.root=Let the hunt begin!
-advancement.mcombat.root.desc=Find and interact with a notice board
+advancement.mcombat.root=MCombat
+advancement.mcombat.root.desc=Let the hunt begin!
