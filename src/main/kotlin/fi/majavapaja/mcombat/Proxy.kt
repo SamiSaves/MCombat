@@ -2,6 +2,7 @@ package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.client.render.mob.FireZombieRender
 import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
+import fi.majavapaja.mcombat.common.advancement.ModTriggerEvents
 import fi.majavapaja.mcombat.common.advancement.ModTriggers
 import fi.majavapaja.mcombat.common.block.ModBlocks
 import fi.majavapaja.mcombat.common.combat.Damage
@@ -41,6 +42,7 @@ open class CommonProxy(val side: Side) {
     StatOverridesCapability.register()
     MinecraftForge.EVENT_BUS.register(StatOverridesEventHandler)
     MinecraftForge.EVENT_BUS.register(Damage)
+    MinecraftForge.EVENT_BUS.register(ModTriggerEvents)
 
     ModBlocks.registerBlocks()
 

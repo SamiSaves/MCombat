@@ -15,7 +15,7 @@
   },
   "criteria": {
     "crafting_table": {
-      "trigger": "mcombat:open_notice_board",
+      "trigger": "mcombat:player_interact_block",
       "conditions": {
         "block": "mcombat:notice_board"
       }

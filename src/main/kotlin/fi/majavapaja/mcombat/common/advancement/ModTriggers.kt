@@ -8,20 +8,20 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 object ModTriggers {
   private const val registerTriggerMethodName = "func_192118_a"
 
-  val openNoticeBoardTrigger = OpenNoticeBoardTrigger()
+  val playerInteractBlock = PlayerInteractBlockTrigger()
 
   fun registerTriggers() {
-    val method = ReflectionHelper.findMethod(
+    val registerTriggerMethod = ReflectionHelper.findMethod(
         CriteriaTriggers::class.java,
         "register",
         registerTriggerMethodName,
         ICriterionTrigger::class.java
     )
 
-    method.isAccessible = true
+    registerTriggerMethod.isAccessible = true
 
     try {
-      method.invoke(null, openNoticeBoardTrigger)
+      registerTriggerMethod.invoke(null, playerInteractBlock)
     } catch (e: IllegalAccessException) {
       e.printStackTrace()
     } catch (e: IllegalArgumentException) {

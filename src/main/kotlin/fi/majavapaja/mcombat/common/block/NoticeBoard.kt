@@ -28,10 +28,6 @@ class NoticeBoard : DirectionalBlock(
   override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
     if (worldIn.isRemote) {
       Minecraft.getMinecraft().displayGuiScreen(NoticeBoardGui())
-    } else {
-      if (playerIn is EntityPlayerMP) {
-        ModTriggers.openNoticeBoardTrigger.trigger(playerIn, this)
-      }
     }
 
     return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)

@@ -15,11 +15,9 @@ import net.minecraft.util.JsonUtils
 import net.minecraft.util.ResourceLocation
 import net.minecraft.entity.player.EntityPlayerMP
 
-
-
-class OpenNoticeBoardTrigger: ICriterionTrigger<OpenNoticeBoardTrigger.Instance> {
+class PlayerInteractBlockTrigger: ICriterionTrigger<PlayerInteractBlockTrigger.Instance> {
   companion object {
-    private val ID = ResourceLocation(modId, "open_notice_board")
+    private val ID = ResourceLocation(modId, "player_interact_block")
   }
   private val listeners = Maps.newHashMap<PlayerAdvancements, Listeners>()
 
@@ -52,9 +50,6 @@ class OpenNoticeBoardTrigger: ICriterionTrigger<OpenNoticeBoardTrigger.Instance>
     this.listeners[player.advancements]?.trigger(block)
   }
 
-  /**
-   * Deserialize a ICriterionInstance of this trigger from the data in the JSON.
-   */
   override fun deserializeInstance(json: JsonObject, context: JsonDeserializationContext): Instance {
     var block: Block? = null
 
