@@ -5,7 +5,6 @@ import fi.majavapaja.mcombat.common.combat.CombatHelper
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.entity.IWeaponArrow
 import fi.majavapaja.mcombat.common.entity.minecraft.createArrowEntity
-import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -60,10 +59,10 @@ class Bow(
       val entityArrow = createArrowEntity(worldIn, itemArrow, player)
 
       if (entityArrow is IWeaponArrow) {
-        val bowDamage = getAsWeapon(bow.item)?.damage ?: hashMapOf()
-        val arrowDamage = getAsWeapon(ammo.item)?.damage ?: hashMapOf()
+        val bowDamage = CombatHelper.getItemDamageStat(bow)
+        val arrowDamage = CombatHelper.getItemDamageStat(ammo)
 
-        val damage = CombatHelper.mergeHashMap(bowDamage, arrowDamage)
+        val damage = CombatHelper.mergeDamageMap(bowDamage, arrowDamage)
         damage.forEach { damage[it.key] = round(it.value * arrowVelocity) }
 
         entityArrow.customDamage = damage
