@@ -56,21 +56,25 @@ private class StatOverrideStorage : Capability.IStorage<StatOverrides> {
   override fun readNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?, nbt: NBTBase) {
     nbt as NBTTagCompound
     instance.damage = DamageType.values()
-      .filter { nbt.hasKey("damage.${it.type}") }
-      .map { it to nbt.getFloat(it.type) }.toMap()
+      .filter { nbt.hasKey(damageKey(it)) }
+      .map { it to nbt.getFloat(damageKey(it)) }.toMap()
     instance.resistance = DamageType.values()
-      .filter { nbt.hasKey("resistance.${it.type}") }
-      .map { it to nbt.getFloat(it.type) }.toMap()
+      .filter { nbt.hasKey(resistanceKey(it)) }
+      .map { it to nbt.getFloat(resistanceKey(it)) }.toMap()
   }
 
   override fun writeNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?): NBTBase {
     val nbt = NBTTagCompound()
     instance.damage.forEach {
-      nbt.setFloat("damage.${it.key.type}", it.value)
+      nbt.setFloat(damageKey(it.key), it.value)
     }
     instance.resistance.forEach {
-      nbt.setFloat("resistance.${it.key.type}", it.value)
+      nbt.setFloat(resistanceKey(it.key), it.value)
     }
     return nbt
   }
+
+  private fun damageKey(type: DamageType) = statKey("damage", type)
+  private fun resistanceKey(type: DamageType) = statKey("resistance", type)
+  private fun statKey(stat: String, type: DamageType) = "$stat.${type.type}"
 }
