@@ -34,9 +34,10 @@ object CombatHelper {
 
     entity.armorInventoryList.forEach {
       if (it.isEmpty) return@forEach
-      val armor = getAsArmor(it.item) ?: return@forEach
+      val armorStats = getItemArmorStat(it)
+      if (armorStats.isEmpty()) return@forEach
 
-      newTotalArmor = mergeDamageMap(armor.armor, newTotalArmor)
+      newTotalArmor = mergeDamageMap(armorStats, newTotalArmor)
     }
 
     return newTotalArmor
@@ -51,6 +52,19 @@ object CombatHelper {
     }
 
     return newMap
+  }
+
+  fun getItemArmorStat(stack: ItemStack): Map<DamageType, Float> {
+    // If the item has stat overrides those override everything else
+    val overrides = StatOverridesCapability.getStatOverrides(stack)
+    if (overrides != null && !overrides.resistance.isEmpty()) {
+      return overrides.resistance
+    }
+
+    return when (val armor = getAsArmor(stack.item)) {
+      null -> emptyMap()
+      else -> armor.armor
+    }
   }
 
   fun getItemDamageStat(stack: ItemStack): Map<DamageType, Float> {
