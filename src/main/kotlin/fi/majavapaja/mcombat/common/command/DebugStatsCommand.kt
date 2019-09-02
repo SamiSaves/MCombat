@@ -13,49 +13,6 @@ import net.minecraft.util.text.TextComponentString
 import java.lang.Float.parseFloat
 import java.lang.RuntimeException
 
-sealed class Args {
-  enum class Stat(val value: String) {
-    Damage("damage"),
-    Resistance("resistance");
-
-    companion object {
-      fun parse(s: String): Stat? = when {
-        Damage.value.startsWith(s) -> Damage
-        Resistance.value.startsWith(s) -> Resistance
-        else -> null
-      }
-    }
-  }
-
-  object Show : Args()
-  data class SetStat(val stat: Stat, val type: DamageType, val value: Float) : Args()
-
-  companion object {
-    fun parse(args: Array<String>): Args = when {
-      args.size == 0 -> Args.Show
-      args.size == 3 -> {
-        when (val stat = Stat.parse(args[0])) {
-          null -> throw UserError("First argument should be either ${Stat.Damage.value} or ${Stat.Resistance.value} (was ${args[0]})")
-          else -> {
-            val type = DamageType.getDamageType(args[1])
-            val value = try {
-              parseFloat(args[2])
-            } catch (e: NumberFormatException) {
-              throw UserError("${args[2]} is not a number")
-            }
-            if (value < 0) {
-              throw UserError("Value should be positive (was ${value})")
-            }
-            Args.SetStat(stat, type, value)
-          }
-        }
-      }
-      else -> throw UserError("Invalid number of arguments")
-    }
-
-  }
-}
-
 class DebugStatsCommand() : CommandBase() {
   val usage = "/${getName()} OR /${getName()} [damage | resistance] <type> <damage>"
 
@@ -87,12 +44,12 @@ class DebugStatsCommand() : CommandBase() {
 
       is Args.SetStat -> {
         when (args.stat) {
-          Args.Stat.Damage ->
+          Stat.Damage ->
             override.damage = when (args.value) {
               0f -> override.damage - args.type
               else -> override.damage + (args.type to args.value)
             }
-          Args.Stat.Resistance ->
+          Stat.Resistance ->
             override.resistance = when (args.value) {
               0f -> override.resistance - args.type
               else -> override.resistance + (args.type to args.value)
@@ -113,3 +70,45 @@ class DebugStatsCommand() : CommandBase() {
 }
 
 class UserError(override val message: String): RuntimeException(message)
+
+sealed class Args {
+  object Show : Args()
+  data class SetStat(val stat: Stat, val type: DamageType, val value: Float) : Args()
+
+  companion object {
+    fun parse(args: Array<String>): Args = when {
+      args.size == 0 -> Show
+      args.size == 3 -> {
+        when (val stat = Stat.parse(args[0])) {
+          null -> throw UserError("First argument should be either ${Stat.Damage.value} or ${Stat.Resistance.value} (was ${args[0]})")
+          else -> {
+            val type = DamageType.getDamageType(args[1])
+            val value = try {
+              parseFloat(args[2])
+            } catch (e: NumberFormatException) {
+              throw UserError("${args[2]} is not a number")
+            }
+            if (value < 0) {
+              throw UserError("Value should be positive (was ${value})")
+            }
+            SetStat(stat, type, value)
+          }
+        }
+      }
+      else -> throw UserError("Invalid number of arguments")
+    }
+  }
+}
+
+enum class Stat(val value: String) {
+  Damage("damage"),
+  Resistance("resistance");
+
+  companion object {
+    fun parse(s: String): Stat? = when {
+      Damage.value.startsWith(s) -> Damage
+      Resistance.value.startsWith(s) -> Resistance
+      else -> null
+    }
+  }
+}
