@@ -58,6 +58,7 @@ object ModItems {
   }
 
   @SubscribeEvent
+  @Suppress("unused")
   fun setTooltip(event: ItemTooltipEvent) {
     val cleanTooltip = {
       // Remove everything after an empty line (should remove the "When in hand" section)
@@ -70,13 +71,13 @@ object ModItems {
     val weapon = getAsWeapon(event.itemStack.item)
     if (weapon is IWeapon) {
       cleanTooltip()
-      event.toolTip.addAll(weapon.getTooltip())
+      event.toolTip.addAll(IWeapon.getTooltip(event.itemStack))
     }
 
     val armor = getAsArmor(event.itemStack.item)
     if (armor is IArmor) {
       cleanTooltip()
-      event.toolTip.addAll(armor.getTooltip())
+      event.toolTip.addAll(IArmor.getTooltip(event.itemStack))
     }
   }
 
