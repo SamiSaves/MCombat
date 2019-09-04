@@ -5,9 +5,7 @@ import fi.majavapaja.mcombat.client.render.projectile.DebugArrowRenderer
 import fi.majavapaja.mcombat.common.advancement.ModTriggerEvents
 import fi.majavapaja.mcombat.common.advancement.ModTriggers
 import fi.majavapaja.mcombat.common.block.ModBlocks
-import fi.majavapaja.mcombat.common.combat.Damage
-import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
-import fi.majavapaja.mcombat.common.combat.StatOverridesEventHandler
+import fi.majavapaja.mcombat.common.combat.*
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
@@ -59,6 +57,12 @@ open class CommonProxy(val side: Side) {
         HuntMessage::class.java,
         101,
         Side.SERVER
+    )
+    network.registerMessage(
+      UpdateStatOverridesMessageHandler::class.java,
+      UpdateStatOverridesMessage::class.java,
+      102,
+      Side.CLIENT
     )
   }
 

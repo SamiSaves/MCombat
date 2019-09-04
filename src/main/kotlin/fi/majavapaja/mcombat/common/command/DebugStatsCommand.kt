@@ -1,11 +1,14 @@
 package fi.majavapaja.mcombat.common.command
 
+import fi.majavapaja.mcombat.CommonProxy
 import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
 import fi.majavapaja.mcombat.common.combat.DamageType
+import fi.majavapaja.mcombat.common.combat.UpdateStatOverridesMessage
 import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
@@ -22,7 +25,7 @@ class DebugStatsCommand() : CommandBase() {
 
   override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
     val entity = sender.commandSenderEntity!!
-    if (!(entity is EntityPlayer)) return
+    if (!(entity is EntityPlayerMP)) return
     try {
       runCommand(entity, Args.parse(args))
     } catch (e: UserError) {
@@ -30,7 +33,7 @@ class DebugStatsCommand() : CommandBase() {
     }
   }
 
-  private fun runCommand(entity: EntityPlayer, args: Args) {
+  private fun runCommand(entity: EntityPlayerMP, args: Args) {
     val stack = itemInHand(entity)
     if (!ModItems.isDebugItem(stack)) {
       throw UserError("Command is only available when holding debug item")
@@ -55,6 +58,8 @@ class DebugStatsCommand() : CommandBase() {
               else -> override.resistance + (args.type to args.value)
             }
         }
+
+        CommonProxy.network.sendTo(UpdateStatOverridesMessage(override), entity)
         sendMessage(entity, "${override}")
       }
     }
