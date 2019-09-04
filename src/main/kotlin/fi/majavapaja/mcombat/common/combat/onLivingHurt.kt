@@ -1,12 +1,10 @@
 package fi.majavapaja.mcombat.common.combat
 
 import fi.majavapaja.mcombat.CommonProxy
-import fi.majavapaja.mcombat.common.combat.CombatHelper.getArmorPoints
 import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.IWeaponArrow
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
-import fi.majavapaja.mcombat.common.item.base.Bow
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
 import net.minecraft.entity.Entity
@@ -41,7 +39,7 @@ fun onLivingHurtEvent(event: LivingHurtEvent) {
   event.isCanceled = true
 
   val damage = getDamage(event.source.trueSource, event.source.immediateSource)
-  val armorPoints = getArmorPoints(entity)
+  val armorPoints = CombatHelper.getArmorPoints(entity)
   var damageAmount = 0f
 
   for ((damageType, amount) in damage) {
@@ -67,14 +65,7 @@ private fun getDamage(trueSource: Entity?, immediateSource: Entity?): Map<Damage
     val mainHandItem = trueSource.heldItemMainhand
 
     if (!mainHandItem.isEmpty) {
-      val overrides = StatOverridesCapability.getStatOverrides(mainHandItem)
-      when {
-        overrides != null && !overrides.damage.isEmpty() -> overrides.damage
-        else -> when (val weapon = getAsWeapon(mainHandItem.item)) {
-          is Bow -> hashMapOf(DamageType.Normal to 2f)
-          else -> weapon?.damage ?: hashMapOf(DamageType.Normal to 2f)
-        }
-      }
+      CombatHelper.getItemDamageStat(mainHandItem)
     } else {
       when {
         trueSource is ICustomMob -> trueSource.damage
@@ -95,12 +86,15 @@ private fun getArrowDamage(trueSource: Entity?, immediateSource: Entity?): HashM
   }
 
   if (trueSource is EntityMob && trueSource !is EntityPlayer) {
-    val bowDamage = getAsWeapon(trueSource.heldItemMainhand.item)?.damage ?: hashMapOf(DamageType.Normal to 0f)
-    damage = CombatHelper.mergeHashMap(damage, bowDamage)
+    val bowDamage = when (trueSource.heldItemMainhand) {
+      null -> hashMapOf(DamageType.Normal to 0f)
+      else -> CombatHelper.getItemDamageStat(trueSource.heldItemMainhand)
+    }
+    damage = CombatHelper.mergeDamageMap(damage, bowDamage)
 
     if (trueSource is EntitySkeleton) {
       val skeletonDamage = getMonsterDamage(trueSource)
-      damage = CombatHelper.mergeHashMap(damage, skeletonDamage)
+      damage = CombatHelper.mergeDamageMap(damage, skeletonDamage)
     }
   }
 
