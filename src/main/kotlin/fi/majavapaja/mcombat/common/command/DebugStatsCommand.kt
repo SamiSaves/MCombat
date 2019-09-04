@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat.common.command
 
 import fi.majavapaja.mcombat.CommonProxy
+import fi.majavapaja.mcombat.Network
 import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
 import fi.majavapaja.mcombat.common.combat.DamageType
 import fi.majavapaja.mcombat.common.combat.UpdateStatOverridesMessage
@@ -59,7 +60,7 @@ class DebugStatsCommand() : CommandBase() {
             }
         }
 
-        CommonProxy.network.sendTo(UpdateStatOverridesMessage(override), entity)
+        Network.sendTo(UpdateStatOverridesMessage(override), entity)
         sendMessage(entity, "${override}")
       }
     }

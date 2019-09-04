@@ -33,10 +33,6 @@ import net.minecraftforge.fml.relauncher.SideOnly
 
 @Suppress("unused")
 open class CommonProxy(val side: Side) {
-  companion object {
-    val network = NetworkRegistry.INSTANCE.newSimpleChannel(modId)!!
-  }
-
   open fun preInit(ev: FMLPreInitializationEvent) {
     MinecraftForge.EVENT_BUS.register(this)
     StatOverridesCapability.register()
@@ -46,24 +42,9 @@ open class CommonProxy(val side: Side) {
 
     ModBlocks.registerBlocks()
 
-    network.registerMessage(
-        ParticleMessageHandler::class.java,
-        ParticleMessage::class.java,
-        100,
-        Side.CLIENT
-    )
-    network.registerMessage(
-        HuntMessageHandler::class.java,
-        HuntMessage::class.java,
-        101,
-        Side.SERVER
-    )
-    network.registerMessage(
-      UpdateStatOverridesMessageHandler::class.java,
-      UpdateStatOverridesMessage::class.java,
-      102,
-      Side.CLIENT
-    )
+    Network.registerMessage(ParticleMessageHandler::class, ParticleMessage::class, Side.CLIENT)
+    Network.registerMessage(HuntMessageHandler::class, HuntMessage::class, Side.SERVER)
+    Network.registerMessage(UpdateStatOverridesMessageHandler::class, UpdateStatOverridesMessage::class, Side.CLIENT)
   }
 
   open fun init(ev: FMLInitializationEvent) {
