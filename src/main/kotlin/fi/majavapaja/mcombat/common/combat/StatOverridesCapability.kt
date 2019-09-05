@@ -94,9 +94,9 @@ data class UpdateStatOverridesMessage(var overrides: StatOverrides = StatOverrid
 
 private class StatOverrideStorage : Capability.IStorage<StatOverrides> {
   override fun readNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?, nbt: NBTBase) =
-    Serializer.fromNBT(nbt as NBTTagString, StatOverrides::class).let {
-      instance.damage = it.damage
-      instance.resistance = it.resistance
+    Serializer.fromNBT(nbt as NBTTagString, StatOverrides::class).run {
+      instance.damage = damage
+      instance.resistance = resistance
     }
 
   override fun writeNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?): NBTBase =
