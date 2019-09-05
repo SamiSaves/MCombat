@@ -12,7 +12,7 @@ enum class DamageType(val type: String) {
   Earth("earth"),
   Air("air");
 
-  override fun toString(): String =
+  fun toDisplayString(): String =
     when (this) {
       Magic -> I18n.format("damageType.magic")
       Fire -> I18n.format("damageType.fire")

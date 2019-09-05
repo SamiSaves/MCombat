@@ -1,22 +1,21 @@
 package fi.majavapaja.mcombat.common.combat
 
+import fi.majavapaja.mcombat.Serializer
 import fi.majavapaja.mcombat.common.capability.CapabilityProvider
 import fi.majavapaja.mcombat.common.capability.CapabilityUtil
 import fi.majavapaja.mcombat.common.item.ModItems
-import fi.majavapaja.mcombat.common.message.readDamageType
-import fi.majavapaja.mcombat.common.message.readMap
-import fi.majavapaja.mcombat.common.message.writeDamageType
-import fi.majavapaja.mcombat.common.message.writeMap
 import fi.majavapaja.mcombat.modId
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTBase
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagString
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.*
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.CapabilityInject
+import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -83,55 +82,23 @@ class UpdateStatOverridesMessageHandler : IMessageHandler<UpdateStatOverridesMes
   }
 }
 
-data class UpdateStatOverridesMessage(val overrides: StatOverrides = StatOverrides()) : IMessage {
+data class UpdateStatOverridesMessage(var overrides: StatOverrides = StatOverrides()) : IMessage {
   override fun toBytes(buf: ByteBuf) {
-    buf.writeMap(overrides.damage) { b, entry ->
-      b.writeDamageType(entry.key)
-      b.writeFloat(entry.value)
-    }
-    buf.writeMap(overrides.resistance) { b, entry ->
-      b.writeDamageType(entry.key)
-      b.writeFloat(entry.value)
-    }
+    Serializer.toBytes(overrides, buf)
   }
 
   override fun fromBytes(buf: ByteBuf) {
-    overrides.damage = buf.readMap { b ->
-      val type = b.readDamageType()
-      val value = b.readFloat()
-      type to value
-    }
-    overrides.resistance = buf.readMap { b ->
-      val type = b.readDamageType()
-      val value = b.readFloat()
-      type to value
-    }
+    overrides = Serializer.fromBytes(buf, StatOverrides::class)
   }
 }
 
 private class StatOverrideStorage : Capability.IStorage<StatOverrides> {
-  override fun readNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?, nbt: NBTBase) {
-    nbt as NBTTagCompound
-    instance.damage = DamageType.values()
-      .filter { nbt.hasKey(damageKey(it)) }
-      .map { it to nbt.getFloat(damageKey(it)) }.toMap()
-    instance.resistance = DamageType.values()
-      .filter { nbt.hasKey(resistanceKey(it)) }
-      .map { it to nbt.getFloat(resistanceKey(it)) }.toMap()
-  }
-
-  override fun writeNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?): NBTBase {
-    val nbt = NBTTagCompound()
-    instance.damage.forEach {
-      nbt.setFloat(damageKey(it.key), it.value)
+  override fun readNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?, nbt: NBTBase) =
+    Serializer.fromNBT(nbt as NBTTagString, StatOverrides::class).let {
+      instance.damage = it.damage
+      instance.resistance = it.resistance
     }
-    instance.resistance.forEach {
-      nbt.setFloat(resistanceKey(it.key), it.value)
-    }
-    return nbt
-  }
 
-  private fun damageKey(type: DamageType) = statKey("damage", type)
-  private fun resistanceKey(type: DamageType) = statKey("resistance", type)
-  private fun statKey(stat: String, type: DamageType) = "$stat.${type.type}"
+  override fun writeNBT(capability: Capability<StatOverrides>, instance: StatOverrides, side: EnumFacing?): NBTBase =
+    Serializer.toNBT(instance)
 }

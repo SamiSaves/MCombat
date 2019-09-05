@@ -3,7 +3,6 @@ package fi.majavapaja.mcombat
 import fi.majavapaja.mcombat.common.command.DebugStatsCommand
 import fi.majavapaja.mcombat.common.command.FooCommand
 import fi.majavapaja.mcombat.common.item.ModItems
-import net.minecraft.command.CommandBase
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.Mod
