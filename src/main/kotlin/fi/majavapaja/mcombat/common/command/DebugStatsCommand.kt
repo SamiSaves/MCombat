@@ -15,9 +15,8 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
 import net.minecraft.util.text.TextComponentString
 import java.lang.Float.parseFloat
-import java.lang.RuntimeException
 
-class DebugStatsCommand() : CommandBase() {
+class DebugStatsCommand : CommandBase() {
   val usage = "/${getName()} OR /${getName()} [damage | resistance] <type> <damage>"
 
   override fun getName() = "d"
