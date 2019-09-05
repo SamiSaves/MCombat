@@ -17,7 +17,7 @@ interface IWeapon {
       var totalDamage = 0f
       if (damage.size > 1) {
         damage.forEach {
-          tooltip.add("  ${it.value.toInt()} ${it.key}")
+          tooltip.add("  ${it.value.toInt()} ${it.key.toDisplayString()}")
           totalDamage += it.value
         }
       } else {

@@ -60,7 +60,6 @@ open class CommonProxy(val side: Side) {
   fun registerItems(event: RegistryEvent.Register<Item>) {
     ModItems.register(event.registry)
   }
-
 }
 
 @SideOnly(Side.CLIENT)

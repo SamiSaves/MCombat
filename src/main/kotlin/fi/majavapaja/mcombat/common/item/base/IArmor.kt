@@ -19,7 +19,7 @@ interface IArmor {
           it.value > 0 -> "+"
           else -> ""
         }
-        tooltip.add("${TextFormatting.DARK_GREEN}$prefix${it.value.toInt()} ${it.key} ${I18n.format("armor")}")
+        tooltip.add("${TextFormatting.DARK_GREEN}$prefix${it.value.toInt()} ${it.key.toDisplayString()} ${I18n.format("armor")}")
       }
 
       return tooltip
