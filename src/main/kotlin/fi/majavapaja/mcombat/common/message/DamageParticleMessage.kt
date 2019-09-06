@@ -92,7 +92,8 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
       }
     }
 
-    val effect = DamageParticle(world, message.x, message.y + 1.5, message.z, minecraft.textureManager, message.amount)
+
+    val effect = DamageParticle(world, message.x, message.y + 1.5, message.z, message.amount)
     minecraft.effectRenderer.addEffect(effect)
   }
 }
