@@ -56,8 +56,8 @@ class ParticleMessage() : IMessage {
   }
 }
 
-class ParticleMessageHandler : IMessageHandler<ParticleMessage, IMessage> {
-  override fun onMessage(message: ParticleMessage, ctx: MessageContext): IMessage? {
+class ParticleMessageHandler : IMessageHandler<ParticleMessage, Nothing> {
+  override fun onMessage(message: ParticleMessage, ctx: MessageContext): Nothing? {
     if (ctx.side != Side.CLIENT) {
       System.err.println("TargetEffectMessageToClient received on wrong side:" + ctx.side)
       return null

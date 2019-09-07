@@ -61,8 +61,8 @@ object StatOverridesEventHandler {
   }
 }
 
-class UpdateStatOverridesMessageHandler : IMessageHandler<UpdateStatOverridesMessage, IMessage> {
-  override fun onMessage(message: UpdateStatOverridesMessage, ctx: MessageContext): IMessage? {
+class UpdateStatOverridesMessageHandler : IMessageHandler<UpdateStatOverridesMessage, Nothing> {
+  override fun onMessage(message: UpdateStatOverridesMessage, ctx: MessageContext): Nothing? {
     val minecraft = Minecraft.getMinecraft()
     val worldClient = minecraft.world
     minecraft.addScheduledTask { processMessage(message, worldClient) }

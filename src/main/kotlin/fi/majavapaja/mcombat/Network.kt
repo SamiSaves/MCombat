@@ -11,8 +11,8 @@ object Network {
   private val channel = NetworkRegistry.INSTANCE.newSimpleChannel(modId)!!
   private var DISCRIMINATOR = 100
 
-  fun <H : IMessageHandler<M, R>, M : IMessage, R : IMessage> registerMessage(handler: KClass<H>, message: KClass<M>, side: Side) =
-    channel.registerMessage(handler.java, message.java, DISCRIMINATOR++, side)
+  internal inline fun <H : IMessageHandler<M, R>, reified M : IMessage, R : IMessage> registerHandler(handler: KClass<H>, side: Side) =
+    channel.registerMessage(handler.java, M::class.java, DISCRIMINATOR++, side)
 
   fun sendTo(message: IMessage, entity: EntityPlayerMP) =
     channel.sendTo(message, entity)

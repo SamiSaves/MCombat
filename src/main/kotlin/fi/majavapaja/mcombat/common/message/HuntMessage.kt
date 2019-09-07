@@ -40,8 +40,8 @@ class HuntMessage(
   }
 }
 
-class HuntMessageHandler : IMessageHandler<HuntMessage, IMessage> {
-  override fun onMessage(message: HuntMessage, ctx: MessageContext): IMessage? {
+class HuntMessageHandler : IMessageHandler<HuntMessage, Nothing> {
+  override fun onMessage(message: HuntMessage, ctx: MessageContext): Nothing? {
     if (ctx.side != Side.SERVER) {
       System.err.println("HuntMessage received on wrong side: ${ctx.side}")
       return null

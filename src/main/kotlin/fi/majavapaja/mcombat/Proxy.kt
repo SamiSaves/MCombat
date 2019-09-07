@@ -12,10 +12,7 @@ import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.entity.FireZombie
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
-import fi.majavapaja.mcombat.common.message.HuntMessage
-import fi.majavapaja.mcombat.common.message.HuntMessageHandler
-import fi.majavapaja.mcombat.common.message.ParticleMessage
-import fi.majavapaja.mcombat.common.message.ParticleMessageHandler
+import fi.majavapaja.mcombat.common.message.*
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraftforge.client.event.ModelRegistryEvent
@@ -27,7 +24,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
@@ -42,9 +38,9 @@ open class CommonProxy(val side: Side) {
 
     ModBlocks.registerBlocks()
 
-    Network.registerMessage(ParticleMessageHandler::class, ParticleMessage::class, Side.CLIENT)
-    Network.registerMessage(HuntMessageHandler::class, HuntMessage::class, Side.SERVER)
-    Network.registerMessage(UpdateStatOverridesMessageHandler::class, UpdateStatOverridesMessage::class, Side.CLIENT)
+    Network.registerHandler(ParticleMessageHandler::class, Side.CLIENT)
+    Network.registerHandler(HuntMessageHandler::class, Side.SERVER)
+    Network.registerHandler(UpdateStatOverridesMessageHandler::class, Side.CLIENT)
   }
 
   open fun init(ev: FMLInitializationEvent) {
