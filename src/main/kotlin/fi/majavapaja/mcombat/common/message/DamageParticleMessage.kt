@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.message
 
+import fi.majavapaja.mcombat.Serializer
 import fi.majavapaja.mcombat.client.particle.AttackParticle
 import fi.majavapaja.mcombat.client.particle.DamageParticle
 import fi.majavapaja.mcombat.common.combat.DamageType
@@ -13,46 +14,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
 import net.minecraftforge.fml.relauncher.Side
 import kotlin.random.Random
 
-class ParticleMessage() : IMessage {
-  var x = 0.0
-  var y = 0.0
-  var z = 0.0
-  var damageTypes = listOf(DamageType.Normal)
-  var amount = 0f
+data class ParticleData(
+  val x: Double,
+  val y: Double,
+  val z: Double,
+  val damageTypes: List<DamageType>,
+  val amount: Float
+)
 
-  constructor(
-      x: Double,
-      y: Double,
-      z: Double,
-      amount: Float,
-      damageTypes: List<DamageType>
-  ): this() {
-    this.x = x
-    this.y = y
-    this.z = z
-    this.damageTypes = damageTypes
-    this.amount = amount
-  }
-
+class ParticleMessage(var data: ParticleData? = null) : IMessage {
   override fun toBytes(buf: ByteBuf) {
-    buf.writeDouble(x)
-    buf.writeDouble(y)
-    buf.writeDouble(z)
-    buf.writeFloat(amount)
-
-    val damageTypes = this.damageTypes.joinToString(",") { it.type }
-    buf.writeInt(damageTypes.length)
-    buf.writeCharSequence(damageTypes, CharsetUtil.UTF_8)
+    Serializer.toBytes(data, buf)
   }
 
   override fun fromBytes(buf: ByteBuf) {
-    x = buf.readDouble()
-    y = buf.readDouble()
-    z = buf.readDouble()
-    amount = buf.readFloat()
-    val damageTypeLength = buf.readInt()
-    val damageTypeData = buf.readCharSequence(damageTypeLength, CharsetUtil.UTF_8)
-    damageTypes = damageTypeData.toString().split(",").map { DamageType.getDamageType(it) }
+    data = Serializer.fromBytes(buf, ParticleData::class)
   }
 }
 
@@ -70,8 +46,9 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, Nothing> {
     return null
   }
 
-  private fun processMessage(message: ParticleMessage, world: World) {
+  private fun processMessage(messageWrapper: ParticleMessage, world: World) {
     val minecraft = Minecraft.getMinecraft()
+    val message = messageWrapper.data!!
     val damageParticles = message.damageTypes.filter { DamageType.getParticleId(it) >= 0 }
 
     damageParticles.forEach {
