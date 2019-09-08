@@ -9,9 +9,11 @@ object NetworkHandlers {
   private var typeIdentifier: Int = 1000
   private fun nextTypeId() = typeIdentifier++
 
+  // When receiving a message we need to find the actual type and handler using the type ID
   private val types: MutableMap<Int, KClass<*>> = mutableMapOf()
-  private val ids: MutableMap<KClass<*>, Int> = mutableMapOf()
   private val handlers: MutableMap<Int, MessageHandler<*, *>> = mutableMapOf()
+  // When sending a message we need to know the type ID for the actual type
+  private val ids: MutableMap<KClass<*>, Int> = mutableMapOf()
 
   internal inline fun <reified Request : Any, reified Response : Any>  registerHandler(noinline handler: MessageHandler<Request, Response>) {
     assertTypeIsRegistered(Response::class)
