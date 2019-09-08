@@ -13,6 +13,8 @@ import fi.majavapaja.mcombat.common.entity.FireZombie
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.common.message.*
+import fi.majavapaja.mcombat.network.NetworkHandlers
+import fi.majavapaja.mcombat.network.Network
 import net.minecraft.item.Item
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraftforge.client.event.ModelRegistryEvent
@@ -38,9 +40,10 @@ open class CommonProxy(val side: Side) {
 
     ModBlocks.registerBlocks()
 
-    Network.registerHandler(ParticleMessageHandler::class, Side.CLIENT)
-    Network.registerHandler(HuntMessageHandler::class, Side.SERVER)
-    Network.registerHandler(UpdateStatOverridesMessageHandler::class, Side.CLIENT)
+    Network.init()
+    NetworkHandlers.registerHandler(ParticleMessageHandler::handle)
+    NetworkHandlers.registerHandler(HuntMessageHandler::handle)
+    NetworkHandlers.registerHandler(UpdateStatOverridesMessageHandler::handle)
   }
 
   open fun init(ev: FMLInitializationEvent) {

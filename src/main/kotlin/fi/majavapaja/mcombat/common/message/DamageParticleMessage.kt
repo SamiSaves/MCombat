@@ -1,20 +1,16 @@
 package fi.majavapaja.mcombat.common.message
 
-import fi.majavapaja.mcombat.Serializer
 import fi.majavapaja.mcombat.client.particle.AttackParticle
 import fi.majavapaja.mcombat.client.particle.DamageParticle
 import fi.majavapaja.mcombat.common.combat.DamageType
-import io.netty.buffer.ByteBuf
-import io.netty.util.CharsetUtil
+import fi.majavapaja.mcombat.network.NetworkHandlers
 import net.minecraft.client.Minecraft
 import net.minecraft.world.World
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
 import net.minecraftforge.fml.relauncher.Side
 import kotlin.random.Random
 
-data class ParticleData(
+data class ParticleMessage(
   val x: Double,
   val y: Double,
   val z: Double,
@@ -22,18 +18,8 @@ data class ParticleData(
   val amount: Float
 )
 
-class ParticleMessage(var data: ParticleData? = null) : IMessage {
-  override fun toBytes(buf: ByteBuf) {
-    Serializer.toBytes(data, buf)
-  }
-
-  override fun fromBytes(buf: ByteBuf) {
-    data = Serializer.fromBytes(buf, ParticleData::class)
-  }
-}
-
-class ParticleMessageHandler : IMessageHandler<ParticleMessage, Nothing> {
-  override fun onMessage(message: ParticleMessage, ctx: MessageContext): Nothing? {
+object ParticleMessageHandler {
+  fun handle(message: ParticleMessage, ctx: MessageContext): NetworkHandlers.NoReply? {
     if (ctx.side != Side.CLIENT) {
       System.err.println("TargetEffectMessageToClient received on wrong side:" + ctx.side)
       return null
@@ -46,9 +32,8 @@ class ParticleMessageHandler : IMessageHandler<ParticleMessage, Nothing> {
     return null
   }
 
-  private fun processMessage(messageWrapper: ParticleMessage, world: World) {
+  private fun processMessage(message: ParticleMessage, world: World) {
     val minecraft = Minecraft.getMinecraft()
-    val message = messageWrapper.data!!
     val damageParticles = message.damageTypes.filter { DamageType.getParticleId(it) >= 0 }
 
     damageParticles.forEach {

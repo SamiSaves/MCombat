@@ -1,13 +1,12 @@
 package fi.majavapaja.mcombat.common.combat
 
-import fi.majavapaja.mcombat.CommonProxy
-import fi.majavapaja.mcombat.Network
 import fi.majavapaja.mcombat.common.entity.ICustomMob
 import fi.majavapaja.mcombat.common.entity.IWeaponArrow
 import fi.majavapaja.mcombat.common.entity.minecraft.getMonsterDamage
 import fi.majavapaja.mcombat.common.entity.minecraft.isMinecraftMonster
 import fi.majavapaja.mcombat.common.item.minecraft.getAsWeapon
 import fi.majavapaja.mcombat.common.message.ParticleMessage
+import fi.majavapaja.mcombat.network.Network
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.monster.EntityMob
@@ -105,11 +104,11 @@ private fun getArrowDamage(trueSource: Entity?, immediateSource: Entity?): HashM
 private fun createParticles (entity: EntityLivingBase, damage: Map<DamageType, Float>, amount: Float) {
   // Send particles to all nearby players
   val particleTargetPoint = NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 64.0)
-    Network.sendToAllAround(ParticleMessage(
+    Network.jsonToAllAround(ParticleMessage(
         entity.posX,
         entity.posY,
         entity.posZ,
-        amount,
-        damage.map { it.key }
+        damage.map { it.key },
+        amount
     ), particleTargetPoint)
 }

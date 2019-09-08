@@ -1,11 +1,9 @@
 package fi.majavapaja.mcombat.common.command
 
-import fi.majavapaja.mcombat.CommonProxy
-import fi.majavapaja.mcombat.Network
 import fi.majavapaja.mcombat.common.combat.StatOverridesCapability
 import fi.majavapaja.mcombat.common.combat.DamageType
-import fi.majavapaja.mcombat.common.combat.UpdateStatOverridesMessage
 import fi.majavapaja.mcombat.common.item.ModItems
+import fi.majavapaja.mcombat.network.Network
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
@@ -59,7 +57,7 @@ class DebugStatsCommand : CommandBase() {
             }
         }
 
-        Network.sendTo(UpdateStatOverridesMessage(override), entity)
+        Network.jsonTo(override, entity)
         sendMessage(entity, "${override}")
       }
     }

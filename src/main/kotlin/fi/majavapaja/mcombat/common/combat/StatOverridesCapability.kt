@@ -5,6 +5,7 @@ import fi.majavapaja.mcombat.common.capability.CapabilityProvider
 import fi.majavapaja.mcombat.common.capability.CapabilityUtil
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.modId
+import fi.majavapaja.mcombat.network.NetworkHandlers
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
@@ -61,22 +62,22 @@ object StatOverridesEventHandler {
   }
 }
 
-class UpdateStatOverridesMessageHandler : IMessageHandler<UpdateStatOverridesMessage, Nothing> {
-  override fun onMessage(message: UpdateStatOverridesMessage, ctx: MessageContext): Nothing? {
+object UpdateStatOverridesMessageHandler {
+  fun handle(overrides: StatOverrides, ctx: MessageContext): NetworkHandlers.NoReply? {
     val minecraft = Minecraft.getMinecraft()
     val worldClient = minecraft.world
-    minecraft.addScheduledTask { processMessage(message, worldClient) }
+    minecraft.addScheduledTask { processMessage(overrides, worldClient) }
     return null
   }
 
-  private fun processMessage(message: UpdateStatOverridesMessage, world: World) {
+  private fun processMessage(updated: StatOverrides, world: World) {
     val minecraft = Minecraft.getMinecraft()
     val player = minecraft.player
     when (val overrides = StatOverridesCapability.getStatOverrides(player.heldItemMainhand)) {
       null -> println("Item in main hand does not have StatOverrides")
       else -> {
-        overrides.damage = message.overrides.damage
-        overrides.resistance = message.overrides.resistance
+        overrides.damage = updated.damage
+        overrides.resistance = updated.resistance
       }
     }
   }

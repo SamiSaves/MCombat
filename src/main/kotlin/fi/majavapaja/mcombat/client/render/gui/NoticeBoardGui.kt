@@ -1,9 +1,8 @@
 package fi.majavapaja.mcombat.client.render.gui
 
-import fi.majavapaja.mcombat.CommonProxy
-import fi.majavapaja.mcombat.Network
 import fi.majavapaja.mcombat.common.message.HuntMessage
 import fi.majavapaja.mcombat.modId
+import fi.majavapaja.mcombat.network.Network
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
@@ -38,14 +37,14 @@ class NoticeBoardGui: GuiScreen() {
     val buttonY = center(height, center(textureHeight, buttonHeight))
 
     addButton(Button(0, buttonX, buttonY - 20, buttonWidth, buttonHeight, "Start Quest") {
-      Network.sendToServer(HuntMessage(
+      Network.jsonToServer(HuntMessage(
           "mcombat:hunt/hunt",
           "start_quest"
       ))
     })
 
     addButton(Button(1, buttonX, buttonY + 20, buttonWidth, buttonHeight, "Finish Quest") {
-      Network.sendToServer(HuntMessage(
+      Network.jsonToServer(HuntMessage(
           "mcombat:hunt/hunt",
           "finish_quest"
       ))

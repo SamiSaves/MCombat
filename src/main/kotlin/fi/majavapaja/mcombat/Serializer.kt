@@ -21,4 +21,13 @@ object Serializer {
 
   fun <T : Any> fromBytes(buf: ByteBuf, type: KClass<T>): T =
     gson.fromJson(buf.readString(), type.java)
+
+  fun <T> toJson(obj: T) =
+    gson.toJson(obj)
+
+  internal inline fun <reified T : Any> fromJson(json: String) =
+    fromJson(json, T::class)
+
+  internal fun <T : Any> fromJson(json: String, type: KClass<T>) =
+    gson.fromJson(json, type.java)
 }
