@@ -1,8 +1,10 @@
-package fi.majavapaja.mcombat.common.entity
+package fi.majavapaja.mcombat.common.entity.hunt
 
 import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
+import fi.majavapaja.mcombat.common.entity.ICustomMob
 import net.minecraft.entity.monster.EntityZombie
+import net.minecraft.util.DamageSource
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import net.minecraftforge.fml.common.registry.EntityRegistry

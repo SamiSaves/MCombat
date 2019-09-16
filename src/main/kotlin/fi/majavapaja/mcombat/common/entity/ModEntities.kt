@@ -1,5 +1,6 @@
 package fi.majavapaja.mcombat.common.entity
 
+import fi.majavapaja.mcombat.common.entity.hunt.FireZombie
 import fi.majavapaja.mcombat.modId
 
 object ModEntities {

@@ -9,7 +9,7 @@ import fi.majavapaja.mcombat.common.combat.*
 import fi.majavapaja.mcombat.common.effect.ModEffects
 import fi.majavapaja.mcombat.common.enchantment.ModEnchantments
 import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
-import fi.majavapaja.mcombat.common.entity.FireZombie
+import fi.majavapaja.mcombat.common.entity.hunt.FireZombie
 import fi.majavapaja.mcombat.common.entity.ModEntities
 import fi.majavapaja.mcombat.common.item.ModItems
 import fi.majavapaja.mcombat.common.message.*

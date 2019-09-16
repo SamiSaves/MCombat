@@ -1,6 +1,6 @@
 package fi.majavapaja.mcombat.client.render.mob
 
-import fi.majavapaja.mcombat.common.entity.FireZombie
+import fi.majavapaja.mcombat.common.entity.hunt.FireZombie
 import fi.majavapaja.mcombat.modId
 import net.minecraft.client.model.ModelZombie
 import net.minecraft.client.renderer.entity.RenderLiving
