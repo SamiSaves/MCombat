@@ -19,6 +19,9 @@
     "start_quest": {
       "trigger": "minecraft:impossible"
     },
+    "defeat_hunt": {
+      "trigger": "minecraft:impossible"
+    },
     "finish_quest": {
       "trigger": "minecraft:impossible"
     }
