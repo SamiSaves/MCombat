@@ -1,57 +1,26 @@
 package fi.majavapaja.mcombat
 
-import fi.majavapaja.mcombat.common.command.DebugStatsCommand
-import fi.majavapaja.mcombat.common.item.ModItems
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.ItemStack
+import fi.majavapaja.mcombat.common.block.ModBlocks
+import net.minecraft.block.Block
+import net.minecraft.item.Item
+import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.common.SidedProxy
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
-const val modId = "mcombat"
-const val modName = "MCombat"
-const val version = "0.0.1"
-
-@Suppress("unused")
-@Mod(
-		modid = modId,
-		name = modName,
-		version = version,
-		modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter"
-)
+@Mod(Main.MOD_ID)
 object Main {
-	@SidedProxy (
-			clientSide = "fi.majavapaja.mcombat.ClientProxy",
-			serverSide = "fi.majavapaja.mcombat.ServerSide"
-	)
-	lateinit var proxy: CommonProxy
+	const val MOD_ID: String = "mcombat"
 
-	val creativeTab: CreativeTabs = object : CreativeTabs(modId) {
-		override fun getIconItemStack() = ItemStack(ModItems.majavapaja)
-		override fun getTabIconItem() = this.iconItemStack
-		override fun getTabLabel(): String = modId
+	init {
+		MOD_BUS.addGenericListener(::registerBlocks)
+		MOD_BUS.addGenericListener(::registerItems)
 	}
 
-	@Mod.EventHandler
-	fun preInit(event: FMLPreInitializationEvent) {
-    proxy.preInit(event)
+	private fun registerBlocks(event: RegistryEvent.Register<Block>) {
+		ModBlocks.registerBlocks(event)
 	}
 
-	@Mod.EventHandler
-	fun init(event: FMLInitializationEvent) {
-		proxy.init(event)
+	private fun registerItems(event: RegistryEvent.Register<Item>) {
+		ModBlocks.registerItems(event)
 	}
-
-	@Mod.EventHandler
-	fun init(event: FMLPostInitializationEvent) {
-		proxy.postInit(event)
-	}
-
-  @Mod.EventHandler
-  fun serverStart(event: FMLServerStartingEvent) {
-    event.registerServerCommand(DebugStatsCommand())
-  }
 }

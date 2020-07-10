@@ -7,7 +7,6 @@ import net.minecraft.util.BlockRenderLayer
 
 class MajavaBlock : BaseBlock(
   name = "majava_block",
-  creativeTab = Main.creativeTab,
   material = Material.ROCK,
   layer = BlockRenderLayer.TRANSLUCENT
 )

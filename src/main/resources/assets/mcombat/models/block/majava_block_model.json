@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "down": "mcombat:blocks/majava_block",
-    "up": "mcombat:blocks/majava_block",
-    "north": "mcombat:blocks/majava_block",
-    "east": "mcombat:blocks/majava_block",
-    "south": "mcombat:blocks/majava_block",
-    "west": "mcombat:blocks/majava_block",
-    "particle": "mcombat:blocks/majava_block"
+    "down": "mcombat:block/majava_block",
+    "up": "mcombat:block/majava_block",
+    "north": "mcombat:block/majava_block",
+    "east": "mcombat:block/majava_block",
+    "south": "mcombat:block/majava_block",
+    "west": "mcombat:block/majava_block",
+    "particle": "mcombat:block/majava_block"
   }
 }

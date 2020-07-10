@@ -1,44 +1,38 @@
 package fi.majavapaja.mcombat.common.block.base
 
-import fi.majavapaja.mcombat.modId
+import fi.majavapaja.mcombat.Main
+import fi.majavapaja.mcombat.common.item.Groups
 import net.minecraft.block.Block
+import net.minecraft.block.BlockRenderType
+import net.minecraft.block.BlockState
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.ItemBlock
+import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
 import net.minecraft.util.BlockRenderLayer
-import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.fml.common.registry.ForgeRegistries
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
+import net.minecraftforge.event.RegistryEvent
 
 open class BaseBlock(
     val name: String,
-    creativeTab: CreativeTabs,
     material: Material,
     val layer: BlockRenderLayer
-) : Block(material) {
-  var item = ItemBlock(this)
+) : Block(Properties.create(material)) {
+  private val itemProperties = Item.Properties().group(Groups.DEFAULT)
+  val item = BlockItem(this, itemProperties)
 
   init {
-    unlocalizedName = name
-    setRegistryName(name)
-    setCreativeTab(creativeTab)
+    setRegistryName(Main.MOD_ID, name)
   }
 
-  fun registerBlock() {
-    ForgeRegistries.BLOCKS.register(this)
+  fun registerBlock(event: RegistryEvent.Register<Block>) {
+    event.registry.register(this)
+  }
 
+  fun registerItem(event: RegistryEvent.Register<Item>) {
     item.registryName = this.registryName
-    ForgeRegistries.ITEMS.register(item)
+    event.registry.register(item)
   }
 
-  @SideOnly(Side.CLIENT)
-  override fun getBlockLayer(): BlockRenderLayer = layer
-
-  @SideOnly(Side.CLIENT)
-  fun registerModel () {
-    val model = ModelResourceLocation("$modId:${this.name}", "inventory")
-    ModelLoader.setCustomModelResourceLocation(item, 0, model)
+  override fun getRenderLayer(): BlockRenderLayer {
+    return layer;
   }
 }

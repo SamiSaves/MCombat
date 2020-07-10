@@ -1,20 +1,17 @@
 package fi.majavapaja.mcombat.common.block
 
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
+import net.minecraft.block.Block
+import net.minecraft.item.Item
+import net.minecraftforge.event.RegistryEvent
 
 object ModBlocks {
-  private val majavaBlock = MajavaBlock()
-  private val noticeBoard = NoticeBoard()
+  val majavaBlock = MajavaBlock()
 
-  fun registerBlocks() {
-    majavaBlock.registerBlock()
-    noticeBoard.registerBlock()
+  fun registerBlocks(event: RegistryEvent.Register<Block>) {
+    majavaBlock.registerBlock(event)
   }
 
-  @SideOnly(Side.CLIENT)
-  fun registerModels() {
-    majavaBlock.registerModel()
-    noticeBoard.registerModel()
+  fun registerItems(event: RegistryEvent.Register<Item>) {
+    majavaBlock.registerItem(event)
   }
 }
