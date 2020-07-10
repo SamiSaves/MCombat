@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "mcombat:items/majavapaja"
+		"layer0": "mcombat:item/majavapaja"
 	}
 }

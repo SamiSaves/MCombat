@@ -1,6 +1,7 @@
 package fi.majavapaja.mcombat
 
 import fi.majavapaja.mcombat.common.block.ModBlocks
+import fi.majavapaja.mcombat.common.item.ModItems
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraftforge.event.RegistryEvent
@@ -22,5 +23,6 @@ object Main {
 
 	private fun registerItems(event: RegistryEvent.Register<Item>) {
 		ModBlocks.registerItems(event)
+		ModItems.registerItems(event)
 	}
 }

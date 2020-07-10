@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "mcombat:items/debug_helmet"
+		"layer0": "mcombat:item/debug_helmet"
 	}
 }

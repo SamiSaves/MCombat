@@ -1,4 +1,12 @@
 {
   "block.mcombat.majava_block": "Block of Majava",
-  "itemGroup.mcombat.default": "MCombat"
+  "itemGroup.mcombat.default": "MCombat",
+  "item.mcombat.majavapaja": "Majavapaja",
+  "item.mcombat.debug_sword": "Debug Sword",
+  "item.mcombat.debug_chestplate": "Debug Chestplate",
+  "item.mcombat.debug_boots": "Debug Boots",
+  "item.mcombat.debug_helmet": "Debug Helmet",
+  "item.mcombat.debug_leggings": "Debug Leggings",
+  "item.mcombat.debug_bow": "Debug Bow",
+  "item.mcombat.debug_arrow": "Debug Arrow"
 }
