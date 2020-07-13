@@ -15,12 +15,12 @@ MCombat mod description.
 [[dependencies.mcombat]]
     modId="forge"
     mandatory=true
-    versionRange="[28.2,)"
+    versionRange="[31.2,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.mcombat]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
