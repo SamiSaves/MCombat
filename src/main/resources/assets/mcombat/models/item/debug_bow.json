@@ -1,29 +1,29 @@
 {
-	"parent": "item/bow",
-	"textures": {
-		"layer0": "mcombat:item/debug_bow"
-	},
-	"overrides": [
-		{
-			"predicate": {
-				"pulling": 1,
-				"pull": 0
-			},
-			"model": "mcombat:item/debug_bow_pull_0"
-		},
-		{
-			"predicate": {
-				"pulling": 1,
-				"pull": 0.5
-			},
-			"model": "mcombat:item/debug_bow_pull_1"
-		},
-		{
-			"predicate": {
-				"pulling": 1,
-				"pull": 0.9
-			},
-			"model": "mcombat:item/debug_bow_pull_2"
-		}
-	]
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "mcombat:item/debug_bow"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0
+      },
+      "model": "mcombat:item/debug_bow_pull_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.5
+      },
+      "model": "mcombat:item/debug_bow_pull_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "mcombat:item/debug_bow_pull_2"
+    }
+  ]
 }

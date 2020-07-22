@@ -28,7 +28,7 @@ class FireZombie(entityType: EntityType<out FireZombie>, world: World): ZombieEn
   override fun registerAttributes() {
     super.registerAttributes()
     getAttribute(SharedMonsterAttributes.MAX_HEALTH).baseValue = 20.0;
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).baseValue = .45;
+    getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).baseValue = .45;
   }
 
   private fun shouldAttack(target: LivingEntity?): Boolean = (target != null)

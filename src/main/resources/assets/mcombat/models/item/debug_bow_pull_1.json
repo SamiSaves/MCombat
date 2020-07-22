@@ -1,6 +1,6 @@
 {
-	"parent": "item/bow",
-	"textures": {
-		"layer0": "mcombat:item/debug_bow_pull_1"
-	}
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "mcombat:item/debug_bow_pull_1"
+  }
 }

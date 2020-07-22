@@ -28,30 +28,30 @@ object Main {
   const val MOD_ID: String = "mcombat"
   val logger: Logger = LogManager.getLogger()
 
-	init {
+  init {
     MOD_BUS.addGenericListener(::registerBlocks)
     MOD_BUS.addGenericListener(::registerItems)
     MOD_BUS.addGenericListener(::registerEntities)
 
     MOD_BUS.addListener(::onSetupClient)
-	}
+  }
 
-	private fun registerBlocks(event: RegistryEvent.Register<Block>) {
-		ModBlocks.registerBlocks(event)
-	}
+  private fun registerBlocks(event: RegistryEvent.Register<Block>) {
+    ModBlocks.registerBlocks(event)
+  }
 
-	private fun registerItems(event: RegistryEvent.Register<Item>) {
-		ModItems.registerItems(event)
-		ModBlocks.registerItems(event)
-		ModEntities.registerEggs(event)
-	}
+  private fun registerItems(event: RegistryEvent.Register<Item>) {
+    ModItems.registerItems(event)
+    ModBlocks.registerItems(event)
+    ModEntities.registerEggs(event)
+  }
 
-	private fun registerEntities(event: RegistryEvent.Register<EntityType<out Entity>>) {
+  private fun registerEntities(event: RegistryEvent.Register<EntityType<out Entity>>) {
     ModEntities.registerEntities(event)
-	}
+  }
 
-	private fun onSetupClient(event: FMLClientSetupEvent) {
-		logger.log(Level.INFO, "Initing client KEKW")
-		ModRenders.registerRenders()
-	}
+  private fun onSetupClient(event: FMLClientSetupEvent) {
+    logger.log(Level.INFO, "Initing client KEKW")
+    ModRenders.registerRenders()
+  }
 }
