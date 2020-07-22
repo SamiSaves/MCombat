@@ -2,11 +2,14 @@ package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
+import fi.majavapaja.mcombat.common.entity.DebugArrowEntity
 import fi.majavapaja.mcombat.common.item.Groups
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.projectile.AbstractArrowEntity
 import net.minecraft.entity.projectile.ArrowEntity
 import net.minecraft.item.ArrowItem
 import net.minecraft.item.ItemStack
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.World
 
 class Arrow(
@@ -17,8 +20,7 @@ class Arrow(
     setRegistryName(Main.MOD_ID, name)
   }
 
-  override fun createArrow(worldIn: World, stack: ItemStack, shooter: LivingEntity): ArrowEntity {
-    // TODO: Switch this to DebugArrowEntity
-    return ArrowEntity(worldIn, shooter)
+  override fun createArrow(worldIn: World, stack: ItemStack, shooter: LivingEntity): AbstractArrowEntity {
+    return DebugArrowEntity(worldIn, shooter)
   }
 }
