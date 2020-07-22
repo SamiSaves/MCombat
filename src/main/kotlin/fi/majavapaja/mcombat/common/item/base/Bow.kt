@@ -2,13 +2,13 @@ package fi.majavapaja.mcombat.common.item.base
 
 import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
-import fi.majavapaja.mcombat.common.item.Groups
+import fi.majavapaja.mcombat.common.item.ModItemGroups
 import net.minecraft.item.*
 
 class Bow(
     name: String,
     override val damage: HashMap<DamageType, Float>
-): BowItem(Properties().group(Groups.DEFAULT)), IWeapon {
+): BowItem(Properties().group(ModItemGroups.DEFAULT)), IWeapon {
   init {
     setRegistryName(Main.MOD_ID, name)
   }

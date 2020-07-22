@@ -1,7 +1,7 @@
 package fi.majavapaja.mcombat.common.block.base
 
 import fi.majavapaja.mcombat.Main
-import fi.majavapaja.mcombat.common.item.Groups
+import fi.majavapaja.mcombat.common.item.ModItemGroups
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.BlockItem
@@ -12,7 +12,7 @@ open class BaseBlock(
     val name: String,
     material: Material,
 ) : Block(Properties.create(material)) {
-  private val itemProperties = Item.Properties().group(Groups.DEFAULT)
+  private val itemProperties = Item.Properties().group(ModItemGroups.DEFAULT)
   val item = BlockItem(this, itemProperties)
 
   init {

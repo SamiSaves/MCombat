@@ -2,13 +2,12 @@ package fi.majavapaja.mcombat.common.entity
 
 import fi.majavapaja.mcombat.Main
 import fi.majavapaja.mcombat.common.combat.DamageType
-import fi.majavapaja.mcombat.common.item.Groups
+import fi.majavapaja.mcombat.common.item.ModItemGroups
 import net.minecraft.entity.*
 import net.minecraft.entity.ai.goal.*
 import net.minecraft.entity.monster.ZombieEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.SpawnEggItem
 import net.minecraft.world.World
 import net.minecraftforge.event.RegistryEvent
@@ -44,7 +43,7 @@ class FireZombie(entityType: EntityType<out FireZombie>, world: World): ZombieEn
     }
 
     fun registerSpawnEgg(event: RegistryEvent.Register<Item>) {
-      val spawnEgg = SpawnEggItem(entityType, 0x3d672f, 0xd96900, Item.Properties().group((Groups.DEFAULT)))
+      val spawnEgg = SpawnEggItem(entityType, 0x3d672f, 0xd96900, Item.Properties().group((ModItemGroups.DEFAULT)))
       spawnEgg.setRegistryName(Main.MOD_ID, "fire_zombie_spawn_egg")
       event.registry.register(spawnEgg)
     }
